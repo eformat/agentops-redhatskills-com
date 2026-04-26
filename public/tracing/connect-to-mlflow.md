@@ -106,7 +106,7 @@ automatically traces all LangChain and LangGraph components — LLM calls, tool 
 graph node transitions, and state checkpoints.
 
 This example is from the
-[bank-voice-agent](https://github.com/redhat-et/bank-voice-agent) reference architecture,
+[bank-voice-agent](https://github.com/eformat/bank-voice-agent) reference architecture,
 which runs a multi-agent banking assistant on OpenShift AI with full MLflow observability.
 
 <Demo files={langgraphFiles} defaultCollapsed={true}>
