@@ -47,13 +47,44 @@ Your agent reads these environment variables at startup. In standalone mode, onl
 
 <CodeBlock title="Environment variables">{envVarsHighlighted}</CodeBlock>
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `MLFLOW_TRACKING_URI` | Yes | MLflow server URL. Set automatically by the Helm chart. |
-| `MLFLOW_EXPERIMENT_NAME` | No | Experiment name. Defaults to the agent name. |
-| `MLFLOW_WORKSPACE` | CR only | Namespace for multi-tenant isolation via the operator gateway. |
-| `MLFLOW_TRACKING_TOKEN_FILE` | CR only | Path to the service account token for gateway authentication. |
-| `REQUESTS_CA_BUNDLE` | CR only | CA bundle for TLS to the operator-managed MLflow gateway. |
+<div className="ApiTable">
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Required</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code className="MdCode">MLFLOW_TRACKING_URI</code></td>
+        <td>Yes</td>
+        <td>MLflow server URL. Set automatically by the Helm chart.</td>
+      </tr>
+      <tr>
+        <td><code className="MdCode">MLFLOW_EXPERIMENT_NAME</code></td>
+        <td>No</td>
+        <td>Experiment name. Defaults to the agent name.</td>
+      </tr>
+      <tr>
+        <td><code className="MdCode">MLFLOW_WORKSPACE</code></td>
+        <td>CR only</td>
+        <td>Namespace for multi-tenant isolation via the operator gateway.</td>
+      </tr>
+      <tr>
+        <td><code className="MdCode">MLFLOW_TRACKING_TOKEN_FILE</code></td>
+        <td>CR only</td>
+        <td>Path to the service account token for gateway authentication.</td>
+      </tr>
+      <tr>
+        <td><code className="MdCode">REQUESTS_CA_BUNDLE</code></td>
+        <td>CR only</td>
+        <td>CA bundle for TLS to the operator-managed MLflow gateway.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 ### Authentication
 
