@@ -1,0 +1,19 @@
+.PHONY: install dev build serve clean lint
+
+install:
+	npm install
+
+dev: install
+	npm run dev
+
+build: install
+	npm run build
+
+serve: build
+	npm run start
+
+clean:
+	rm -rf .next out
+
+lint:
+	npm run lint

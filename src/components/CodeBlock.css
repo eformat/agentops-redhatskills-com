@@ -1,0 +1,74 @@
+.CodeBlockRoot {
+  align-self: stretch;
+  background-color: var(--color-content);
+  border: 1px solid var(--gray-c2);
+  border-radius: var(--radius-6);
+  margin-bottom: 1.5rem;
+}
+
+.CodeBlockPanel {
+  font-size: var(--font-size-14);
+  line-height: 1;
+  background-color: var(--gray-s2);
+  background-clip: padding-box;
+  color: var(--gray-t2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  white-space: nowrap;
+  padding-inline-start: 0.75rem;
+  padding-inline-end: 0.25rem;
+  height: 2.25rem;
+  gap: 1rem;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  border-bottom: 1px solid var(--gray-c2);
+}
+
+.CodeBlockPanelTitle {
+  font-size: var(--font-size-14);
+  line-height: 1.25rem;
+  color: var(--gray-t2);
+  font-weight: var(--font-weight-400);
+}
+
+.CodeBlockCopyButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  background: none;
+  color: var(--gray-t1);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-13);
+  cursor: pointer;
+  border-radius: var(--radius-4);
+}
+
+@media (hover: hover) {
+  .CodeBlockCopyButton:hover {
+    background-color: var(--gray-c1);
+    color: var(--gray-t2);
+  }
+}
+
+.CodeBlockContent {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.CodeBlockPre {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-13);
+  line-height: 1.25rem;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  color: var(--color-foreground);
+  cursor: text;
+}
+
+.CodeBlockPre code {
+  display: block;
+  white-space: pre;
+}

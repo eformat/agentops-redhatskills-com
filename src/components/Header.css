@@ -1,0 +1,79 @@
+.Header {
+  font-size: var(--font-size-15);
+  line-height: 1.375rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: var(--header-height);
+  width: 100%;
+}
+
+.HeaderInner {
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 1.5rem;
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  box-shadow: inset 0 -1px var(--color-gridline);
+  background-color: var(--gray-s2);
+  z-index: 2;
+}
+
+@media (min-width: 64rem) {
+  .HeaderInner {
+    position: static;
+    box-shadow: none;
+    background-color: transparent;
+  }
+}
+
+.HeaderLogoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  margin: -0.25rem -0.5rem;
+}
+
+.HeaderLogoLink:focus-visible {
+  border-radius: var(--radius-6);
+  outline: 2px solid var(--color-blue);
+  outline-offset: -1px;
+}
+
+.HeaderLogoText {
+  font-weight: var(--font-weight-700);
+  font-size: var(--font-size-15);
+}
+
+.HeaderDesktopActions {
+  display: none;
+  gap: 1.5rem;
+}
+
+@media (min-width: 64rem) {
+  .HeaderDesktopActions {
+    display: flex;
+  }
+}
+
+.HeaderLink {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  margin: -0.25rem -0.5rem;
+  border-radius: var(--radius-6);
+}
+
+@media (hover: hover) {
+  .HeaderLink:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--gray-p1);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+}
