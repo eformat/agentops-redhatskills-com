@@ -15,6 +15,96 @@
     "section": ""
   },
   {
+    "title": "Using SPIFFE/SPIRE Identity",
+    "href": "/identity/using-spiffe-spire",
+    "section": ""
+  },
+  {
+    "title": "SPIFFE/SPIRE Concepts",
+    "href": "/identity/using-spiffe-spire#spiffe-spire-concepts",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Identity format",
+    "href": "/identity/using-spiffe-spire#identity-format",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "SVID types",
+    "href": "/identity/using-spiffe-spire#svid-types",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Agent Frameworks",
+    "href": "/identity/using-spiffe-spire#agent-frameworks",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "LangGraph",
+    "href": "/identity/using-spiffe-spire#langgraph",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "CrewAI",
+    "href": "/identity/using-spiffe-spire#crewai",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "AutoGen",
+    "href": "/identity/using-spiffe-spire#autogen",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "LlamaIndex",
+    "href": "/identity/using-spiffe-spire#llamaindex",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Google ADK",
+    "href": "/identity/using-spiffe-spire#google-adk",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "OpenShift Deployment",
+    "href": "/identity/using-spiffe-spire#openshift-deployment",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Kagenti labels and annotations",
+    "href": "/identity/using-spiffe-spire#kagenti-labels-and-annotations",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Helm chart configuration",
+    "href": "/identity/using-spiffe-spire#helm-chart-configuration",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Kubernetes manifests",
+    "href": "/identity/using-spiffe-spire#kubernetes-manifests",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "AuthBridge",
+    "href": "/identity/using-spiffe-spire#authbridge",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Outbound route configuration",
+    "href": "/identity/using-spiffe-spire#outbound-route-configuration",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Token exchange",
+    "href": "/identity/using-spiffe-spire#token-exchange",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
+    "title": "Verifying Identity",
+    "href": "/identity/using-spiffe-spire#verifying-identity",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
     "title": "Lifecycle",
     "href": "/lifecycle",
     "section": ""

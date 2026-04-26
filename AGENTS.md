@@ -9,4 +9,5 @@ Each documentation page has a corresponding `.md` file.
 
 ## Available Pages
 
+- [https://agentops.redhatskills.com/identity/using-spiffe-spire.md](https://agentops.redhatskills.com/identity/using-spiffe-spire.md)
 - [https://agentops.redhatskills.com/tracing/connect-to-mlflow.md](https://agentops.redhatskills.com/tracing/connect-to-mlflow.md)

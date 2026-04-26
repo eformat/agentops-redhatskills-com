@@ -15,7 +15,13 @@ const navigation = {
       ],
     },
     { title: 'Evaluation', href: '/evaluation' },
-    { title: 'Identity', href: '/identity' },
+    {
+      title: 'Identity',
+      href: '/identity',
+      children: [
+        { title: 'Using SPIFFE/SPIRE', href: '/identity/using-spiffe-spire' },
+      ],
+    },
     { title: 'Observability', href: '/observability' },
     { title: 'Catalog', href: '/catalog' },
     { title: 'Lifecycle', href: '/lifecycle' },
