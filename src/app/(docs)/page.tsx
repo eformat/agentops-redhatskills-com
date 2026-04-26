@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const topics = [
   { title: 'Security', href: '/security', description: 'Secure agent communication, authentication, and authorization.' },
-  { title: 'Tracing', href: '/tracing/connect-to-mlflow', description: 'Send agent traces from any framework to MLflow on OpenShift AI.' },
+  { title: 'Tracing', href: '/tracing', description: 'Send agent traces from any framework to MLflow on OpenShift AI.' },
   { title: 'Evaluation', href: '/evaluation', description: 'Measure agent quality, correctness, and safety.' },
   { title: 'Identity', href: '/identity', description: 'Workload identity for agents using SPIRE, SPIFFE, and service accounts.' },
   { title: 'Observability', href: '/observability', description: 'Metrics, logs, and dashboards for agent operations.' },

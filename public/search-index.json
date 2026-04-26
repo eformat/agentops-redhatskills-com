@@ -203,5 +203,10 @@
     "title": "CR mode (MLflow Operator)",
     "href": "/tracing/connect-to-mlflow#cr-mode-mlflow-operator",
     "section": "Connect to MLFlow"
+  },
+  {
+    "title": "Tracing",
+    "href": "/tracing",
+    "section": ""
   }
 ]
