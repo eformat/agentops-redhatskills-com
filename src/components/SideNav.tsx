@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import './SideNav.css';
 
-interface NavItem {
+export interface NavItem {
   title: string;
   href: string;
   children?: NavItem[];

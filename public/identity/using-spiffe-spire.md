@@ -96,7 +96,7 @@ startup by reading the JWT SVID from the mounted volume, then attached as tags t
 MLflow trace for provenance tracking.
 
 This example is from the
-[bank-voice-agent](https://github.com/redhat-et/bank-voice-agent) reference architecture,
+[bank-voice-agent](https://github.com/eformat/bank-voice-agent) reference architecture,
 which runs a multi-agent banking assistant on OpenShift AI with full SPIRE workload identity.
 
 <Demo files={langgraphFiles} defaultCollapsed={true}>
@@ -251,7 +251,7 @@ volume, and sets the `KAGENTI_ENABLED` environment variable.
 For deployments without Helm, apply the kagenti labels directly to your Kubernetes
 manifests. Each agent needs a ServiceAccount, a Service with the A2A port, and a
 Deployment with the correct labels.
-See the [kagenti agent examples](https://github.com/kagenti/kagenti-agent-examples)
+See the [kagenti agent examples](https://github.com/kagenti/agent-examples)
 for complete working manifests.
 
 <CodeBlock title="k8s.yaml">{k8sManifestHighlighted}</CodeBlock>

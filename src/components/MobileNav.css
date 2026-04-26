@@ -1,0 +1,85 @@
+.MobileNavTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-foreground);
+  border-radius: var(--radius-6);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.MobileNavTrigger:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: -1px;
+}
+
+@media (min-width: 64rem) {
+  .MobileNavTrigger {
+    display: none;
+  }
+}
+
+.MobileNavBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background-color 200ms ease;
+}
+
+.MobileNavBackdrop[data-open] {
+  background-color: rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+}
+
+@media (min-width: 64rem) {
+  .MobileNavBackdrop {
+    display: none;
+  }
+}
+
+.MobileNavDrawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(80vw, 20rem);
+  background-color: var(--color-content);
+  border-right: 1px solid var(--color-gridline);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-p2) transparent;
+  transform: translateX(-100%);
+  transition: transform 250ms ease;
+  z-index: 51;
+  padding-top: var(--header-height);
+}
+
+.MobileNavDrawer[data-open] {
+  transform: translateX(0);
+}
+
+@media (min-width: 64rem) {
+  .MobileNavDrawer {
+    display: none;
+  }
+}
+
+.MobileNavDrawer .SideNavRoot {
+  display: block;
+  position: static;
+}
+
+.MobileNavActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--color-gridline);
+}

@@ -2,9 +2,15 @@
 
 import Link from 'next/link';
 import { Search, SearchTrigger } from './Search';
+import { MobileNav } from './MobileNav';
+import type { NavItem } from './SideNav';
 import './Header.css';
 
-export function Header() {
+interface HeaderProps {
+  sections: Record<string, NavItem[]>;
+}
+
+export function Header({ sections }: HeaderProps) {
   return (
     <header className="Header">
       <div className="HeaderInner">
@@ -26,6 +32,7 @@ export function Header() {
             GitHub
           </a>
         </div>
+        <MobileNav sections={sections} />
       </div>
       <Search />
     </header>

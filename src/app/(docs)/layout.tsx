@@ -34,7 +34,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
       <div className="RootLayoutContainer">
         <div className="RootLayoutContent">
           <div className="ContentLayoutRoot">
-            <Header />
+            <Header sections={navigation} />
             <SideNav sections={navigation} />
             <main className="ContentLayoutMain">
               <QuickNavContainer>{children}</QuickNavContainer>
