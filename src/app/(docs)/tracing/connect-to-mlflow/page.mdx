@@ -176,8 +176,6 @@ to MLflow's OTLP endpoint or via the `mlflow.tracing` API.
 
 The Helm chart handles MLflow deployment and injects the correct environment variables
 into your agent's pod. The configuration differs between standalone and CR mode. 
-See the [chart CR template](https://github.com/eformat/bank-voice-agent/blob/main/ai-voice-agent/deploy/chart/templates/mlflow-cr.yaml)
-for a full working example.
 
 ### Standalone mode
 
@@ -193,6 +191,8 @@ for a full working example.
 Uses the MLflow operator to manage MLflow as a custom resource. The operator provides
 a gateway that handles multi-tenant workspace isolation and service account
 authentication. An init container merges CA certificates for TLS.
+See the [chart CR template](https://github.com/eformat/bank-voice-agent/blob/main/ai-voice-agent/deploy/chart/templates/mlflow-cr.yaml)
+for a full working example.
 
 <CodeBlock title="backend-deployment.yaml">{deploymentYamlHighlighted}</CodeBlock>
 
