@@ -175,12 +175,14 @@ to MLflow's OTLP endpoint or via the `mlflow.tracing` API.
 ## OpenShift Deployment
 
 The Helm chart handles MLflow deployment and injects the correct environment variables
-into your agent's pod. The configuration differs between standalone and CR mode.
+into your agent's pod. The configuration differs between standalone and CR mode. 
 
 ### Standalone mode
 
 Deploys MLflow as a Deployment + Service + PVC in your namespace. The agent connects
 directly via HTTP. This is the simplest setup and works on any OpenShift cluster.
+See the [chart deployment template](https://github.com/eformat/bank-voice-agent/blob/main/ai-voice-agent/deploy/chart/templates/mlflow-deployment.yaml)
+for a full working example.
 
 <CodeBlock title="values.yaml">{valuesYamlHighlighted}</CodeBlock>
 
@@ -189,6 +191,8 @@ directly via HTTP. This is the simplest setup and works on any OpenShift cluster
 Uses the MLflow operator to manage MLflow as a custom resource. The operator provides
 a gateway that handles multi-tenant workspace isolation and service account
 authentication. An init container merges CA certificates for TLS.
+See the [chart CR template](https://github.com/eformat/bank-voice-agent/blob/main/ai-voice-agent/deploy/chart/templates/mlflow-cr.yaml)
+for a full working example.
 
 <CodeBlock title="backend-deployment.yaml">{deploymentYamlHighlighted}</CodeBlock>
 

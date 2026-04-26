@@ -43,4 +43,5 @@ ${mdFiles.map((f) => `- [${siteUrl}${f}](${siteUrl}${f})`).join('\n')}
 `;
 
 writeFileSync('AGENTS.md', agentsMd);
+copyFileSync('AGENTS.md', join(outRoot, 'AGENTS.md'));
 console.log('AGENTS.md generated');
