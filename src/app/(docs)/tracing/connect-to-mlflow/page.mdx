@@ -181,6 +181,8 @@ into your agent's pod. The configuration differs between standalone and CR mode.
 
 Deploys MLflow as a Deployment + Service + PVC in your namespace. The agent connects
 directly via HTTP. This is the simplest setup and works on any OpenShift cluster.
+See the [chart deployment template](https://github.com/eformat/voice-agents/blob/main/ai-voice-agent/deploy/chart/templates/mlflow-deployment.yaml)
+for a full working example.
 
 <CodeBlock title="values.yaml">{valuesYamlHighlighted}</CodeBlock>
 
