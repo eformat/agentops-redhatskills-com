@@ -115,6 +115,11 @@
     "section": ""
   },
   {
+    "title": "Markdown (for agents)",
+    "href": "/",
+    "section": ""
+  },
+  {
     "title": "Red Hat AI AgentOps",
     "href": "/",
     "section": ""
@@ -122,6 +127,11 @@
   {
     "title": "Topics",
     "href": "/#topics",
+    "section": "Red Hat AI AgentOps"
+  },
+  {
+    "title": "Built for Humans and Agents",
+    "href": "/#built-for-humans-and-agents",
     "section": "Red Hat AI AgentOps"
   },
   {
