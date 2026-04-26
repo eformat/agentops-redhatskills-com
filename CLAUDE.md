@@ -1,0 +1,117 @@
+# Red Hat AI AgentOps Documentation Site
+
+## Overview
+
+Documentation site for AgentOps topics on Red Hat OpenShift AI. Built with Next.js 15 (App Router, static export) with a visual design replicated from [base-ui.com](https://base-ui.com).
+
+## Quick Start
+
+```bash
+make dev      # install deps + start dev server (turbopack)
+make build    # production build (static export to out/)
+make serve    # build + serve production
+make lint     # next lint
+make clean    # remove .next/ and out/
+```
+
+## Architecture
+
+### Layout
+
+3-column CSS Grid layout matching base-ui.com:
+- **Left sidebar** (`SideNav`) — topic navigation, sticky, visible at 64rem+
+- **Center content** — max-width 48rem, MDX-rendered pages
+- **Right sidebar** (`QuickNav`) — "On this page" TOC, visible at 84rem+
+
+Grid defined in `src/app/(docs)/layout.css`. Breakpoints: 64rem (sidebar), 84rem (QuickNav).
+
+### Content Pages (MDX)
+
+Content is authored in MDX files (`page.mdx`). The `src/mdx-components.tsx` maps markdown elements to styled components using CSS classes from `src/css/globals.css`:
+
+| Markdown | CSS Class | Element |
+|----------|-----------|---------|
+| `# H1` | `.MdH1` | Page title |
+| `## H2` | `.MdH2` | Section heading (auto-slugified `id`) |
+| `### H3` | `.MdH3` | Subsection heading (auto-slugified `id`) |
+| paragraph | `.MdP` | Body text |
+| `**bold**` | `.MdStrong` | Bold |
+| `` `code` `` | `.MdCode` | Inline code |
+| `[text](url)` | `.MdLink` | Link |
+| `- item` | `.MdUl` | Unordered list |
+| table | `.ApiTable` wrapper | Data table |
+
+### Code Examples Pattern
+
+Large code constants live in companion `code-examples.ts` files next to the MDX page. They export pre-highlighted HTML via `src/utils/highlight.ts` and file arrays for the `Demo` component.
+
+Example: `src/app/(docs)/tracing/connect-to-mlflow/code-examples.ts`
+
+### Key Components
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| `SideNav` | `src/components/SideNav.tsx` | Left sidebar with nested children support |
+| `QuickNav` | `src/components/QuickNav.tsx` | Right-side TOC from manual `items` array |
+| `Demo` | `src/components/Demo.tsx` | Multi-file tabbed code viewer with preview |
+| `CodeBlock` | `src/components/CodeBlock.tsx` | Single code block with title + copy |
+| `FrameworkCards` | `src/components/FrameworkCards.tsx` | Responsive card grid for agent frameworks |
+| `MarkdownLink` | `src/components/MarkdownLink.tsx` | "View as Markdown" link using `usePathname()` |
+| `Header` | `src/components/Header.tsx` | Fixed header with logo + GitHub link |
+
+### Navigation
+
+Navigation data is defined in `src/app/(docs)/layout.tsx`. The `NavItem` interface supports nesting:
+
+```typescript
+interface NavItem {
+  title: string;
+  href: string;
+  children?: NavItem[];
+}
+```
+
+Children expand in the sidebar when `pathname.startsWith(parent.href)`.
+
+### Styling
+
+- Plain CSS files (no modules, no Tailwind) — each component has a co-located `.css` file
+- CSS custom properties for theming in `src/css/globals.css`
+- Dark mode via `@media (prefers-color-scheme: dark)`
+- Syntax highlighting colors: `--color-syntax-keyword`, `--color-syntax-string`, etc.
+- Custom tokenizer in `src/utils/highlight.ts` (no external highlighting dependency)
+
+## Design Decisions
+
+1. **No MDX plugins** — simple `@next/mdx` setup without remark/rehype plugins. Heading IDs are auto-generated in `mdx-components.tsx` via slugification. QuickNav items are manually defined per page.
+
+2. **Static export** — `output: 'export'` in next.config.mjs. All pages pre-rendered to static HTML. Deployed to GitHub Pages via `.github/workflows/deploy.yml`.
+
+3. **View as Markdown** — `scripts/copy-mdx.mjs` runs as a `prebuild` step, copying `.mdx` source files to `public/` with `.md` extension. The `MarkdownLink` component links to `${pathname}.md`.
+
+4. **Framework cards over sidebar links** — Agent frameworks (LangGraph, CrewAI, AutoGen, LlamaIndex, Google ADK) are shown as clickable cards in the page content rather than sidebar links, for faster discovery.
+
+5. **Nested sidebar** — Sub-topics nest under parent topics (e.g., "Connect to MLFlow" under "Tracing") using the `children` property on `NavItem`. Only expanded when the user is on a matching route.
+
+6. **Custom syntax highlighter** — `src/utils/highlight.ts` handles Python/JS/YAML tokenization without external dependencies. Returns HTML with `<span style="color:var(...)">` tokens.
+
+## Content Topics
+
+| Topic | Status | Route |
+|-------|--------|-------|
+| Security | Stub | `/security` |
+| Tracing | Implemented | `/tracing` |
+| Tracing > Connect to MLFlow | Full content | `/tracing/connect-to-mlflow` |
+| Evaluation | Stub | `/evaluation` |
+| Identity | Stub | `/identity` |
+| Observability | Stub | `/observability` |
+| Catalog | Stub | `/catalog` |
+| Lifecycle | Stub | `/lifecycle` |
+
+## Adding a New Content Page
+
+1. Create `src/app/(docs)/<topic>/<subtopic>/page.mdx`
+2. If the page has code examples, create a companion `code-examples.ts` with highlighted exports
+3. Add a `<QuickNav items={[...]} />` at the top with heading IDs
+4. Add the route to the `navigation` object in `src/app/(docs)/layout.tsx` as a child of the parent topic
+5. The `prebuild` script automatically picks up new `.mdx` pages for "View as Markdown"

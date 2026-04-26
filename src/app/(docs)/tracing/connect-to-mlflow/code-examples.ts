@@ -1,10 +1,6 @@
-import { Demo } from '@/components/Demo';
-import { CodeBlock } from '@/components/CodeBlock';
-import { QuickNav } from '@/components/QuickNav';
-import { FrameworkCards } from '@/components/FrameworkCards';
 import { highlight } from '@/utils/highlight';
 
-const quickNavItems = [
+export const quickNavItems = [
   { id: 'openshift-ai-setup', text: 'OpenShift AI Setup', level: 2 },
   { id: 'environment-variables', text: 'Environment variables', level: 3 },
   { id: 'authentication', text: 'Authentication', level: 3 },
@@ -18,8 +14,6 @@ const quickNavItems = [
   { id: 'standalone-mode', text: 'Standalone mode', level: 3 },
   { id: 'cr-mode', text: 'CR mode (MLflow Operator)', level: 3 },
 ];
-
-// ── LangGraph canonical example from bank-voice-agent ──
 
 const langgraphServer = `import os
 import mlflow
@@ -108,8 +102,6 @@ const langgraphRequirements = `langgraph>=0.4
 langchain-openai>=0.3
 mlflow>=3.1`;
 
-// ── CrewAI ──
-
 const crewaiExample = `import os
 import mlflow
 from crewai import Agent, Task, Crew, Process
@@ -170,8 +162,6 @@ result = crew.kickoff(inputs={"topic": "AI agent observability"})`;
 const crewaiRequirements = `crewai>=0.121
 mlflow>=3.1`;
 
-// ── AutoGen ──
-
 const autogenExample = `import os
 import mlflow
 from autogen_agentchat.agents import AssistantAgent
@@ -228,8 +218,6 @@ const autogenRequirements = `autogen-agentchat>=0.4
 autogen-ext[openai]>=0.4
 mlflow>=3.1`;
 
-// ── LlamaIndex ──
-
 const llamaindexExample = `import os
 import mlflow
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
@@ -268,8 +256,6 @@ print(response)`;
 const llamaindexRequirements = `llama-index>=0.12
 llama-index-llms-openai>=0.4
 mlflow>=3.1`;
-
-// ── Google ADK ──
 
 const adkExample = `import os
 import mlflow
@@ -342,8 +328,6 @@ asyncio.run(run())`;
 const adkRequirements = `google-adk>=1.2
 mlflow>=3.1`;
 
-// ── OpenShift deployment config ──
-
 const envVarsCode = `# Required
 MLFLOW_TRACKING_URI=http://mlflow:5500
 
@@ -354,6 +338,11 @@ MLFLOW_EXPERIMENT_NAME=my-agent
 MLFLOW_WORKSPACE=my-namespace
 MLFLOW_TRACKING_TOKEN_FILE=/var/run/secrets/kubernetes.io/serviceaccount/token
 REQUESTS_CA_BUNDLE=/tmp/ca-bundle/combined-ca.crt`;
+
+const tokenAuthCode = `_token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "").strip()
+if _token_file and os.path.isfile(_token_file):
+    with open(_token_file) as f:
+        os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()`;
 
 const deploymentYaml = `# backend-deployment.yaml (Helm template excerpt)
 containers:
@@ -418,278 +407,34 @@ initContainers:
       - name: ca-bundle
         mountPath: /tmp/ca-bundle`;
 
-export default function ConnectToMlflowPage() {
-  const langgraphFiles = [
-    { name: 'server.py', content: highlight(langgraphServer), language: 'python' },
-    { name: 'graph.py', content: highlight(langgraphGraph), language: 'python' },
-    { name: 'requirements.txt', content: highlight(langgraphRequirements), language: 'text' },
-  ];
+export const langgraphFiles = [
+  { name: 'server.py', content: highlight(langgraphServer), language: 'python' },
+  { name: 'graph.py', content: highlight(langgraphGraph), language: 'python' },
+  { name: 'requirements.txt', content: highlight(langgraphRequirements), language: 'text' },
+];
 
-  const crewaiFiles = [
-    { name: 'main.py', content: highlight(crewaiExample), language: 'python' },
-    { name: 'requirements.txt', content: highlight(crewaiRequirements), language: 'text' },
-  ];
+export const crewaiFiles = [
+  { name: 'main.py', content: highlight(crewaiExample), language: 'python' },
+  { name: 'requirements.txt', content: highlight(crewaiRequirements), language: 'text' },
+];
 
-  const autogenFiles = [
-    { name: 'main.py', content: highlight(autogenExample), language: 'python' },
-    { name: 'requirements.txt', content: highlight(autogenRequirements), language: 'text' },
-  ];
+export const autogenFiles = [
+  { name: 'main.py', content: highlight(autogenExample), language: 'python' },
+  { name: 'requirements.txt', content: highlight(autogenRequirements), language: 'text' },
+];
 
-  const llamaindexFiles = [
-    { name: 'main.py', content: highlight(llamaindexExample), language: 'python' },
-    { name: 'requirements.txt', content: highlight(llamaindexRequirements), language: 'text' },
-  ];
+export const llamaindexFiles = [
+  { name: 'main.py', content: highlight(llamaindexExample), language: 'python' },
+  { name: 'requirements.txt', content: highlight(llamaindexRequirements), language: 'text' },
+];
 
-  const adkFiles = [
-    { name: 'main.py', content: highlight(adkExample), language: 'python' },
-    { name: 'requirements.txt', content: highlight(adkRequirements), language: 'text' },
-  ];
+export const adkFiles = [
+  { name: 'main.py', content: highlight(adkExample), language: 'python' },
+  { name: 'requirements.txt', content: highlight(adkRequirements), language: 'text' },
+];
 
-  return (
-    <>
-      <QuickNav items={quickNavItems} />
-      <div style={{ paddingTop: '1.5rem', paddingBottom: '5rem' }}>
-        <h1 className="MdH1">Connect to MLFlow</h1>
-        <p className="MdSubtitle">
-          Send agent traces from any framework to MLflow on Red Hat OpenShift AI.
-        </p>
-
-        <p className="MdP">
-          MLflow tracing captures every LLM call, tool invocation, and agent state transition
-          as structured spans. On OpenShift AI, MLflow runs as a managed service that your agent
-          connects to via environment variables — no code changes needed when moving between
-          standalone and operator-managed deployments.
-        </p>
-
-        <p className="MdP">
-          The pattern is the same across all frameworks: read the tracking URI from the environment,
-          optionally authenticate with a service account token, and call the framework&apos;s{' '}
-          <code className="MdCode">autolog()</code> function. Every trace is then automatically
-          collected, including LLM inputs/outputs, latency, token counts, and tool results.
-        </p>
-
-        <FrameworkCards />
-
-        {/* ── OpenShift AI Setup ── */}
-
-        <h2 className="MdH2" id="openshift-ai-setup">OpenShift AI Setup</h2>
-
-        <p className="MdP">
-          MLflow on OpenShift AI supports two deployment modes:{' '}
-          <strong className="MdStrong">standalone</strong> (a Deployment + Service + PVC managed by
-          your Helm chart) and <strong className="MdStrong">CR mode</strong> (an MLflow custom
-          resource managed by the MLflow operator). Both expose the same tracking API — only the
-          connection details differ.
-        </p>
-
-        <h3 className="MdH3" id="environment-variables">Environment variables</h3>
-
-        <p className="MdP">
-          Your agent reads these environment variables at startup. In standalone mode, only{' '}
-          <code className="MdCode">MLFLOW_TRACKING_URI</code> is required. In CR mode, the
-          workspace and token file are also needed.
-        </p>
-
-        <CodeBlock title="Environment variables">{highlight(envVarsCode)}</CodeBlock>
-
-        <div className="ApiTable">
-          <table>
-            <thead>
-              <tr>
-                <th>Variable</th>
-                <th>Required</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code className="MdCode">MLFLOW_TRACKING_URI</code></td>
-                <td>Yes</td>
-                <td>MLflow server URL. Set automatically by the Helm chart.</td>
-              </tr>
-              <tr>
-                <td><code className="MdCode">MLFLOW_EXPERIMENT_NAME</code></td>
-                <td>No</td>
-                <td>Experiment name. Defaults to the agent name.</td>
-              </tr>
-              <tr>
-                <td><code className="MdCode">MLFLOW_WORKSPACE</code></td>
-                <td>CR only</td>
-                <td>Namespace for multi-tenant isolation via the operator gateway.</td>
-              </tr>
-              <tr>
-                <td><code className="MdCode">MLFLOW_TRACKING_TOKEN_FILE</code></td>
-                <td>CR only</td>
-                <td>Path to the service account token for gateway authentication.</td>
-              </tr>
-              <tr>
-                <td><code className="MdCode">REQUESTS_CA_BUNDLE</code></td>
-                <td>CR only</td>
-                <td>CA bundle for TLS to the operator-managed MLflow gateway.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 className="MdH3" id="authentication">Authentication</h3>
-
-        <p className="MdP">
-          In CR mode, the agent authenticates to the MLflow operator gateway using a Kubernetes
-          service account token. The token is mounted at the standard path and read at startup:
-        </p>
-
-        <CodeBlock title="Token file authentication">{highlight(
-`_token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "").strip()
-if _token_file and os.path.isfile(_token_file):
-    with open(_token_file) as f:
-        os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()`)}</CodeBlock>
-
-        <p className="MdP">
-          The operator gateway also requires a merged CA bundle (system CAs + Kubernetes service CA)
-          for TLS verification. This is handled by an init container in the deployment.
-        </p>
-
-        {/* ── Agent Frameworks ── */}
-
-        <h2 className="MdH2" id="agent-frameworks">Agent Frameworks</h2>
-
-        {/* ── LangGraph ── */}
-
-        <h3 className="MdH3" id="langgraph">LangGraph</h3>
-
-        <p className="MdP">
-          <a className="MdLink" href="https://langchain-ai.github.io/langgraph/">LangGraph</a>{' '}
-          is the most common framework for building stateful, multi-actor agent applications.
-          MLflow&apos;s <code className="MdCode">mlflow.langchain.autolog()</code> automatically
-          traces all LangChain and LangGraph components — LLM calls, tool executions, graph node
-          transitions, and state checkpoints.
-        </p>
-
-        <p className="MdP">
-          This example is from the{' '}
-          <a className="MdLink" href="https://github.com/redhat-et/bank-voice-agent">
-            bank-voice-agent
-          </a>{' '}
-          reference architecture, which runs a multi-agent banking assistant on OpenShift AI
-          with full MLflow observability.
-        </p>
-
-        <Demo files={langgraphFiles} defaultCollapsed={false}>
-          <div className="DemoPreviewText">
-            <strong className="MdStrong">mlflow.langchain.autolog()</strong>
-            <span> — Traces LLM calls, tool use, and graph state transitions</span>
-          </div>
-        </Demo>
-
-        <p className="MdP">
-          With <code className="MdCode">autolog()</code> enabled, every call to{' '}
-          <code className="MdCode">graph.invoke()</code> or{' '}
-          <code className="MdCode">graph.stream()</code> produces a trace with spans for each node,
-          LLM invocation, and tool call. No manual callbacks are needed.
-        </p>
-
-        {/* ── CrewAI ── */}
-
-        <h3 className="MdH3" id="crewai">CrewAI</h3>
-
-        <p className="MdP">
-          <a className="MdLink" href="https://www.crewai.com/">CrewAI</a>{' '}
-          orchestrates role-based AI agents working together as a crew.
-          MLflow&apos;s <code className="MdCode">mlflow.crewai.autolog()</code> captures
-          each agent&apos;s task execution, tool calls, and crew-level orchestration.
-        </p>
-
-        <Demo files={crewaiFiles} defaultCollapsed={false}>
-          <div className="DemoPreviewText">
-            <strong className="MdStrong">mlflow.crewai.autolog()</strong>
-            <span> — Traces crew orchestration, agent tasks, and tool calls</span>
-          </div>
-        </Demo>
-
-        {/* ── AutoGen ── */}
-
-        <h3 className="MdH3" id="autogen">AutoGen</h3>
-
-        <p className="MdP">
-          <a className="MdLink" href="https://microsoft.github.io/autogen/">AutoGen</a>{' '}
-          enables multi-agent conversations where agents collaborate, debate, and solve problems
-          together. MLflow&apos;s <code className="MdCode">mlflow.autogen.autolog()</code> traces
-          each agent turn, message exchange, and termination condition.
-        </p>
-
-        <Demo files={autogenFiles} defaultCollapsed={false}>
-          <div className="DemoPreviewText">
-            <strong className="MdStrong">mlflow.autogen.autolog()</strong>
-            <span> — Traces agent conversations, turns, and group chat flow</span>
-          </div>
-        </Demo>
-
-        {/* ── LlamaIndex ── */}
-
-        <h3 className="MdH3" id="llamaindex">LlamaIndex</h3>
-
-        <p className="MdP">
-          <a className="MdLink" href="https://www.llamaindex.ai/">LlamaIndex</a>{' '}
-          specializes in RAG pipelines and data-connected agents.
-          MLflow&apos;s <code className="MdCode">mlflow.llama_index.autolog()</code> captures
-          document loading, embedding, retrieval, and query engine execution.
-        </p>
-
-        <Demo files={llamaindexFiles} defaultCollapsed={false}>
-          <div className="DemoPreviewText">
-            <strong className="MdStrong">mlflow.llama_index.autolog()</strong>
-            <span> — Traces RAG retrieval, embedding, and query execution</span>
-          </div>
-        </Demo>
-
-        {/* ── Google ADK ── */}
-
-        <h3 className="MdH3" id="google-adk">Google ADK</h3>
-
-        <p className="MdP">
-          <a className="MdLink" href="https://google.github.io/adk-docs/">Google Agent Development Kit (ADK)</a>{' '}
-          builds agents using Gemini models with built-in tool use. ADK uses OpenTelemetry
-          natively — traces can be exported to MLflow&apos;s OTLP endpoint or via the{' '}
-          <code className="MdCode">mlflow.tracing</code> API.
-        </p>
-
-        <Demo files={adkFiles} defaultCollapsed={false}>
-          <div className="DemoPreviewText">
-            <strong className="MdStrong">OpenTelemetry export</strong>
-            <span> — Traces agent runs, tool calls, and Gemini model interactions</span>
-          </div>
-        </Demo>
-
-        {/* ── OpenShift Deployment ── */}
-
-        <h2 className="MdH2" id="openshift-deployment">OpenShift Deployment</h2>
-
-        <p className="MdP">
-          The Helm chart handles MLflow deployment and injects the correct environment variables
-          into your agent&apos;s pod. The configuration differs between standalone and CR mode.
-        </p>
-
-        <h3 className="MdH3" id="standalone-mode">Standalone mode</h3>
-
-        <p className="MdP">
-          Deploys MLflow as a Deployment + Service + PVC in your namespace. The agent connects
-          directly via HTTP. This is the simplest setup and works on any OpenShift cluster.
-        </p>
-
-        <CodeBlock title="values.yaml">{highlight(valuesYaml)}</CodeBlock>
-
-        <h3 className="MdH3" id="cr-mode">CR mode (MLflow Operator)</h3>
-
-        <p className="MdP">
-          Uses the MLflow operator to manage MLflow as a custom resource. The operator provides
-          a gateway that handles multi-tenant workspace isolation and service account
-          authentication. An init container merges CA certificates for TLS.
-        </p>
-
-        <CodeBlock title="backend-deployment.yaml">{highlight(deploymentYaml)}</CodeBlock>
-
-        <CodeBlock title="Init container — CA bundle merge">{highlight(initContainerYaml)}</CodeBlock>
-      </div>
-    </>
-  );
-}
+export const envVarsHighlighted = highlight(envVarsCode);
+export const tokenAuthHighlighted = highlight(tokenAuthCode);
+export const valuesYamlHighlighted = highlight(valuesYaml);
+export const deploymentYamlHighlighted = highlight(deploymentYaml);
+export const initContainerYamlHighlighted = highlight(initContainerYaml);

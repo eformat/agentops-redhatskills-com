@@ -10,7 +10,7 @@ build: install
 	npm run build
 
 serve: build
-	npm run start
+	npx serve out
 
 clean:
 	rm -rf .next out
