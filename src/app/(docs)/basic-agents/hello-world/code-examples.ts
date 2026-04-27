@@ -21,11 +21,11 @@ export const quickNavItems = [
 
 // ── LangGraph ────────────────────────────────────────────────────
 
-const langgraphCode = `"""Hello World ReAct agent — LangChain."""
+const langgraphCode = `"""Hello World ReAct agent — LangGraph."""
 
 import os
-from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
+from langgraph.prebuilt import create_react_agent
 
 
 def get_weather(city: str) -> str:
@@ -38,11 +38,11 @@ llm = ChatOpenAI(
     base_url=os.environ.get("OPENAI_BASE_URL"),
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
-agent = create_agent(
+agent = create_react_agent(
     llm,
     tools=[get_weather],
-    system_prompt="You are a helpful assistant. When you receive a tool "
-                  "result, summarize it as a final answer.",
+    prompt="You are a helpful assistant. When you receive a tool "
+           "result, summarize it as a final answer.",
 )
 
 result = agent.invoke(
@@ -53,7 +53,7 @@ for msg in result["messages"]:
     print(f"{msg.type}: {msg.content}")
 `;
 
-const langgraphReqs = `langchain>=1.0
+const langgraphReqs = `langgraph>=0.4
 langchain-openai>=0.3`;
 
 // ── CrewAI ───────────────────────────────────────────────────────

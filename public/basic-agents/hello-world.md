@@ -72,16 +72,15 @@ Mistral Instruct v0.3+, Qwen 2.5+.
 
 ### LangGraph
 
-[LangChain](https://python.langchain.com/) provides `create_agent` — a
-one-liner that wires tools into the reason → act → observe loop. It
-accepts a `ChatOpenAI` instance, which reads `OPENAI_API_KEY` and
-`OPENAI_BASE_URL` from the environment automatically. Under the hood,
-agents are compiled as [LangGraph](https://langchain-ai.github.io/langgraph/)
-graphs.
+[LangGraph](https://langchain-ai.github.io/langgraph/) provides
+`create_react_agent` — a one-liner that wires tools into the
+reason → act → observe loop. It uses `ChatOpenAI` under the hood, which
+reads `OPENAI_API_KEY` and `OPENAI_BASE_URL` from the environment
+automatically.
 
 <Demo files={langgraphFiles} defaultCollapsed={true}>
   <div className="DemoPreviewText">
-    <strong className="MdStrong">create_agent()</strong>
+    <strong className="MdStrong">create_react_agent()</strong>
     <span> — ReAct loop in one function call</span>
   </div>
 </Demo>
