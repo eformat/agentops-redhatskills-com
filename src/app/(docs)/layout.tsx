@@ -6,6 +6,13 @@ import { QuickNavContainer } from '@/components/QuickNav';
 
 const navigation = {
   'Red Hat AI AgentOps': [
+    {
+      title: 'Basic Agents',
+      href: '/basic-agents',
+      children: [
+        { title: 'Hello World Agent', href: '/basic-agents/hello-world' },
+      ],
+    },
     { title: 'Security', href: '/security' },
     {
       title: 'Tracing',
@@ -23,7 +30,6 @@ const navigation = {
       ],
     },
     { title: 'Observability', href: '/observability' },
-    { title: 'Catalog', href: '/catalog' },
     { title: 'Lifecycle', href: '/lifecycle' },
   ],
 };

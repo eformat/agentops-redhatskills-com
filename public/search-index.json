@@ -1,7 +1,92 @@
 [
   {
-    "title": "Catalog",
-    "href": "/catalog",
+    "title": "Hello World Agent",
+    "href": "/basic-agents/hello-world",
+    "section": ""
+  },
+  {
+    "title": "How it works",
+    "href": "/basic-agents/hello-world#how-it-works",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Running it",
+    "href": "/basic-agents/hello-world#running-it",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "OpenAI",
+    "href": "/basic-agents/hello-world#openai",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Local or hosted model",
+    "href": "/basic-agents/hello-world#local-or-hosted-model",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Agent Frameworks",
+    "href": "/basic-agents/hello-world#agent-frameworks",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "LangGraph",
+    "href": "/basic-agents/hello-world#langgraph",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "CrewAI",
+    "href": "/basic-agents/hello-world#crewai",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "AutoGen",
+    "href": "/basic-agents/hello-world#autogen",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "LlamaIndex",
+    "href": "/basic-agents/hello-world#llamaindex",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Google ADK",
+    "href": "/basic-agents/hello-world#google-adk",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Deploy on OpenShift",
+    "href": "/basic-agents/hello-world#deploy-on-openshift",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Build the image",
+    "href": "/basic-agents/hello-world#build-the-image",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Export env vars",
+    "href": "/basic-agents/hello-world#export-env-vars",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Run the agent",
+    "href": "/basic-agents/hello-world#run-the-agent",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Check the logs",
+    "href": "/basic-agents/hello-world#check-the-logs",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Clean up",
+    "href": "/basic-agents/hello-world#clean-up",
+    "section": "Hello World Agent"
+  },
+  {
+    "title": "Basic Agents",
+    "href": "/basic-agents",
     "section": ""
   },
   {
