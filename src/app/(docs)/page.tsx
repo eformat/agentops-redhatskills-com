@@ -4,6 +4,7 @@ import { highlight } from '@/utils/highlight';
 import Link from 'next/link';
 
 const topics = [
+  { title: 'Basic Agents', href: '/basic-agents', description: 'Build your first agent with step-by-step examples across popular frameworks.' },
   { title: 'Security', href: '/security', description: 'Secure agent communication, authentication, and authorization.' },
   { title: 'Tracing', href: '/tracing', description: 'Send agent traces from any framework to MLflow on OpenShift AI.' },
   { title: 'Evaluation', href: '/evaluation', description: 'Measure agent quality, correctness, and safety.' },

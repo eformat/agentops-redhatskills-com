@@ -116,9 +116,32 @@ if mlflow_uri:
             os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
 
     mlflow.set_tracking_uri(mlflow_uri)
-    mlflow.set_experiment(
-        os.environ.get("MLFLOW_EXPERIMENT_NAME", "crewai-agent")
+
+    # Workspace support (MLflow operator CR mode)
+    _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+    if _workspace:
+        mlflow.set_workspace(_workspace)
+
+    experiment_name = os.environ.get(
+        "MLFLOW_EXPERIMENT_NAME", "crewai-agent"
     )
+
+    if _workspace:
+        import mlflow.tracking.fluent as _fluent
+
+        client = mlflow.MlflowClient()
+        exps = client.search_experiments(
+            filter_string=f"name = '{experiment_name}'"
+        )
+        if exps:
+            _fluent._active_experiment_id = exps[0].experiment_id
+        else:
+            _fluent._active_experiment_id = client.create_experiment(
+                experiment_name
+            )
+    else:
+        mlflow.set_experiment(experiment_name)
+
     mlflow.crewai.autolog()
     print(f"[mlflow] CrewAI tracing enabled → {mlflow_uri}")
 
@@ -179,9 +202,32 @@ if mlflow_uri:
             os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
 
     mlflow.set_tracking_uri(mlflow_uri)
-    mlflow.set_experiment(
-        os.environ.get("MLFLOW_EXPERIMENT_NAME", "autogen-agent")
+
+    # Workspace support (MLflow operator CR mode)
+    _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+    if _workspace:
+        mlflow.set_workspace(_workspace)
+
+    experiment_name = os.environ.get(
+        "MLFLOW_EXPERIMENT_NAME", "autogen-agent"
     )
+
+    if _workspace:
+        import mlflow.tracking.fluent as _fluent
+
+        client = mlflow.MlflowClient()
+        exps = client.search_experiments(
+            filter_string=f"name = '{experiment_name}'"
+        )
+        if exps:
+            _fluent._active_experiment_id = exps[0].experiment_id
+        else:
+            _fluent._active_experiment_id = client.create_experiment(
+                experiment_name
+            )
+    else:
+        mlflow.set_experiment(experiment_name)
+
     mlflow.autogen.autolog()
     print(f"[mlflow] AutoGen tracing enabled → {mlflow_uri}")
 
@@ -234,9 +280,32 @@ if mlflow_uri:
             os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
 
     mlflow.set_tracking_uri(mlflow_uri)
-    mlflow.set_experiment(
-        os.environ.get("MLFLOW_EXPERIMENT_NAME", "llamaindex-agent")
+
+    # Workspace support (MLflow operator CR mode)
+    _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+    if _workspace:
+        mlflow.set_workspace(_workspace)
+
+    experiment_name = os.environ.get(
+        "MLFLOW_EXPERIMENT_NAME", "llamaindex-agent"
     )
+
+    if _workspace:
+        import mlflow.tracking.fluent as _fluent
+
+        client = mlflow.MlflowClient()
+        exps = client.search_experiments(
+            filter_string=f"name = '{experiment_name}'"
+        )
+        if exps:
+            _fluent._active_experiment_id = exps[0].experiment_id
+        else:
+            _fluent._active_experiment_id = client.create_experiment(
+                experiment_name
+            )
+    else:
+        mlflow.set_experiment(experiment_name)
+
     mlflow.llama_index.autolog()
     print(f"[mlflow] LlamaIndex tracing enabled → {mlflow_uri}")
 
@@ -274,9 +343,32 @@ if mlflow_uri:
             os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
 
     mlflow.set_tracking_uri(mlflow_uri)
-    mlflow.set_experiment(
-        os.environ.get("MLFLOW_EXPERIMENT_NAME", "google-adk-agent")
+
+    # Workspace support (MLflow operator CR mode)
+    _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+    if _workspace:
+        mlflow.set_workspace(_workspace)
+
+    experiment_name = os.environ.get(
+        "MLFLOW_EXPERIMENT_NAME", "google-adk-agent"
     )
+
+    if _workspace:
+        import mlflow.tracking.fluent as _fluent
+
+        client = mlflow.MlflowClient()
+        exps = client.search_experiments(
+            filter_string=f"name = '{experiment_name}'"
+        )
+        if exps:
+            _fluent._active_experiment_id = exps[0].experiment_id
+        else:
+            _fluent._active_experiment_id = client.create_experiment(
+                experiment_name
+            )
+    else:
+        mlflow.set_experiment(experiment_name)
+
     # ADK uses OpenTelemetry — export spans to MLflow
     os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"] = mlflow_uri
     os.environ["OTEL_EXPORTER_OTLP_PROTOCOL"] = "http/protobuf"
