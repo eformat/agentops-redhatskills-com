@@ -1,4 +1,4 @@
-.PHONY: install dev build serve clean lint
+.PHONY: install dev build serve clean lint marketplace
 
 install:
 	npm install
@@ -17,3 +17,6 @@ clean:
 
 lint:
 	npm run lint
+
+marketplace:
+	python3 scripts/sync_marketplace.py

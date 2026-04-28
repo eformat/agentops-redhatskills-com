@@ -20,6 +20,7 @@ const quickNavItems = [
   { id: 'point-your-agent-here', text: 'Point your agent here', level: 3 },
   { id: 'agentsmd', text: 'AGENTS.md', level: 3 },
   { id: 'view-as-markdown', text: 'View as Markdown', level: 3 },
+  { id: 'skills-marketplace', text: 'Skills Marketplace', level: 2 },
 ];
 
 const claudeMdExample = highlight(
@@ -37,6 +38,14 @@ https://agentops.redhatskills.com/identity/using-spiffe-spire
 
 # Markdown (for agents)
 https://agentops.redhatskills.com/identity/using-spiffe-spire.md`
+);
+
+const marketplaceAdd = highlight(
+`/plugin marketplace add eformat/agentops-redhatskills-com`
+);
+
+const marketplaceInstall = highlight(
+`/plugin install langchain-agent@agentops-redhatskills`
 );
 
 export default function Home() {
@@ -154,6 +163,45 @@ export default function Home() {
         </p>
 
         <CodeBlock title="URL pattern">{urlPattern}</CodeBlock>
+
+        <h2 className="MdH2" id="skills-marketplace">Skills Marketplace</h2>
+
+        <p className="MdP">
+          This site is also a{' '}
+          <strong className="MdStrong">Claude Code plugin marketplace</strong>.
+          Skills are reusable agent capabilities — scaffolding generators, code
+          reviewers, deployment helpers — that you can install directly into your
+          Claude Code session.
+        </p>
+
+        <p className="MdP">
+          Add the marketplace to Claude Code:
+        </p>
+
+        <CodeBlock title="Add marketplace">{marketplaceAdd}</CodeBlock>
+
+        <p className="MdP">
+          Then install individual skills:
+        </p>
+
+        <CodeBlock title="Install a skill">{marketplaceInstall}</CodeBlock>
+
+        <div className="ApiTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Skill</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code className="MdCode">langchain-agent</code></td>
+                <td>Scaffold a LangChain/LangGraph ReAct agent wired to any OpenAI-compatible endpoint</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
       </div>
     </>

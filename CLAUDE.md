@@ -7,11 +7,12 @@ Documentation site for AgentOps topics on Red Hat OpenShift AI. Built with Next.
 ## Quick Start
 
 ```bash
-make dev      # install deps + start dev server (turbopack)
-make build    # production build (static export to out/)
-make serve    # build + serve production
-make lint     # next lint
-make clean    # remove .next/ and out/
+make dev          # install deps + start dev server (turbopack)
+make build        # production build (static export to out/)
+make serve        # build + serve production
+make lint         # next lint
+make clean        # remove .next/ and out/
+make marketplace  # regenerate .claude-plugin/marketplace.json from registry.yaml
 ```
 
 ## Architecture
@@ -112,6 +113,30 @@ Children expand in the sidebar when `pathname.startsWith(parent.href)`.
 | Observability | Stub | `/observability` |
 | Catalog | Stub | `/catalog` |
 | Lifecycle | Stub | `/lifecycle` |
+
+## Skills Marketplace
+
+This repo is a Claude Code plugin marketplace. Users add it with `/plugin marketplace add eformat/agentops-redhatskills-com` and install plugins with `/plugin install <name>@agentops-redhatskills`.
+
+### How it works
+
+- `registry.yaml` is the **source of truth** — all plugin metadata lives here
+- `scripts/sync_marketplace.py` generates `.claude-plugin/marketplace.json` from it
+- `.claude-plugin/marketplace.json` is what Claude Code reads — **do not edit it directly**
+- CI (`.github/workflows/validate-registry.yml`) fails if marketplace.json is out of sync
+
+### Commands
+
+```bash
+make marketplace   # regenerate .claude-plugin/marketplace.json from registry.yaml
+```
+
+### Adding a new plugin
+
+1. Add a plugin entry to `registry.yaml` (follow the existing `langchain-agent` entry as a template)
+2. Place the skill's `SKILL.md` in `skills/<plugin-name>/SKILL.md`
+3. Run `make marketplace` to regenerate marketplace.json
+4. Commit both `registry.yaml` and `.claude-plugin/marketplace.json`
 
 ## Adding a New Content Page
 

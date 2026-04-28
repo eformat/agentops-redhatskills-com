@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "description": "Skills for the Red Hat AI AgentOps documentation site.\n"
+  },
+  "name": "agentops-redhatskills",
+  "owner": {
+    "name": "eformat"
+  },
+  "plugins": [
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Scaffold a basic LangChain/LangGraph ReAct agent with a tool, wired to any OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI Model-as-a-Service).\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "langchain",
+        "langgraph",
+        "react-agent",
+        "scaffolding",
+        "openai"
+      ],
+      "name": "langchain-agent",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/langchain-agent"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    }
+  ]
+}
