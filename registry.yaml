@@ -41,3 +41,111 @@ plugins:
       claude-code:
         install: "/plugin install langchain-agent@agentops-redhatskills"
     depends_on: []
+
+  - name: crewai-agent
+    description: >
+      Scaffold a basic CrewAI agent with a tool, wired to any
+      OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI
+      Model-as-a-Service).
+    version: "0.1.0"
+    category: agent-frameworks
+    tags: [crewai, react-agent, scaffolding, openai, litellm]
+    author:
+      name: eformat
+    source:
+      type: github
+      repo: eformat/agentops-redhatskills-com
+      ref: main
+    strict: false
+    skills_dir: skills/crewai-agent
+    homepage: https://github.com/eformat/agentops-redhatskills-com
+    repository: https://github.com/eformat/agentops-redhatskills-com
+    skills:
+      - name: crewai-agent
+        description: Scaffold a basic CrewAI agent with a tool
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install crewai-agent@agentops-redhatskills"
+    depends_on: []
+
+  - name: autogen-agent
+    description: >
+      Scaffold a basic AutoGen agent with a tool, wired to any
+      OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI
+      Model-as-a-Service).
+    version: "0.1.0"
+    category: agent-frameworks
+    tags: [autogen, react-agent, scaffolding, openai, async]
+    author:
+      name: eformat
+    source:
+      type: github
+      repo: eformat/agentops-redhatskills-com
+      ref: main
+    strict: false
+    skills_dir: skills/autogen-agent
+    homepage: https://github.com/eformat/agentops-redhatskills-com
+    repository: https://github.com/eformat/agentops-redhatskills-com
+    skills:
+      - name: autogen-agent
+        description: Scaffold a basic AutoGen agent with a tool
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install autogen-agent@agentops-redhatskills"
+    depends_on: []
+
+  - name: llamaindex-agent
+    description: >
+      Scaffold a basic LlamaIndex ReAct agent with a tool, wired to any
+      OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI
+      Model-as-a-Service).
+    version: "0.1.0"
+    category: agent-frameworks
+    tags: [llamaindex, react-agent, scaffolding, openai, rag]
+    author:
+      name: eformat
+    source:
+      type: github
+      repo: eformat/agentops-redhatskills-com
+      ref: main
+    strict: false
+    skills_dir: skills/llamaindex-agent
+    homepage: https://github.com/eformat/agentops-redhatskills-com
+    repository: https://github.com/eformat/agentops-redhatskills-com
+    skills:
+      - name: llamaindex-agent
+        description: Scaffold a basic LlamaIndex ReAct agent with a tool
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install llamaindex-agent@agentops-redhatskills"
+    depends_on: []
+
+  - name: google-adk-agent
+    description: >
+      Scaffold a basic Google ADK agent with a tool, wired to any
+      OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI
+      Model-as-a-Service).
+    version: "0.1.0"
+    category: agent-frameworks
+    tags: [google-adk, react-agent, scaffolding, openai, litellm]
+    author:
+      name: eformat
+    source:
+      type: github
+      repo: eformat/agentops-redhatskills-com
+      ref: main
+    strict: false
+    skills_dir: skills/google-adk-agent
+    homepage: https://github.com/eformat/agentops-redhatskills-com
+    repository: https://github.com/eformat/agentops-redhatskills-com
+    skills:
+      - name: google-adk-agent
+        description: Scaffold a basic Google ADK agent with a tool
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install google-adk-agent@agentops-redhatskills"
+    depends_on: []

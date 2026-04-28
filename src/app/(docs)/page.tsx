@@ -197,7 +197,23 @@ export default function Home() {
             <tbody>
               <tr>
                 <td><code className="MdCode">langchain-agent</code></td>
-                <td>Scaffold a LangChain/LangGraph ReAct agent wired to any OpenAI-compatible endpoint</td>
+                <td>Scaffold a LangChain/LangGraph ReAct agent</td>
+              </tr>
+              <tr>
+                <td><code className="MdCode">crewai-agent</code></td>
+                <td>Scaffold a CrewAI agent with role-based orchestration</td>
+              </tr>
+              <tr>
+                <td><code className="MdCode">autogen-agent</code></td>
+                <td>Scaffold an AutoGen multi-agent conversation</td>
+              </tr>
+              <tr>
+                <td><code className="MdCode">llamaindex-agent</code></td>
+                <td>Scaffold a LlamaIndex ReAct agent</td>
+              </tr>
+              <tr>
+                <td><code className="MdCode">google-adk-agent</code></td>
+                <td>Scaffold a Google ADK agent with session management</td>
               </tr>
             </tbody>
           </table>

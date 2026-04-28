@@ -33,6 +33,114 @@
       },
       "strict": false,
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Scaffold a basic CrewAI agent with a tool, wired to any OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI Model-as-a-Service).\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "crewai",
+        "react-agent",
+        "scaffolding",
+        "openai",
+        "litellm"
+      ],
+      "name": "crewai-agent",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/crewai-agent"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Scaffold a basic AutoGen agent with a tool, wired to any OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI Model-as-a-Service).\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "autogen",
+        "react-agent",
+        "scaffolding",
+        "openai",
+        "async"
+      ],
+      "name": "autogen-agent",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/autogen-agent"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Scaffold a basic LlamaIndex ReAct agent with a tool, wired to any OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI Model-as-a-Service).\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "llamaindex",
+        "react-agent",
+        "scaffolding",
+        "openai",
+        "rag"
+      ],
+      "name": "llamaindex-agent",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/llamaindex-agent"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Scaffold a basic Google ADK agent with a tool, wired to any OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI Model-as-a-Service).\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "google-adk",
+        "react-agent",
+        "scaffolding",
+        "openai",
+        "litellm"
+      ],
+      "name": "google-adk-agent",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/google-adk-agent"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
     }
   ]
 }
