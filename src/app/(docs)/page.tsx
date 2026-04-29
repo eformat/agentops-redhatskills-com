@@ -16,7 +16,7 @@ const topics = [
 
 const quickNavItems = [
   { id: 'topics', text: 'Topics', level: 2 },
-  { id: 'built-for-humans-and-agents', text: 'Built for Humans and Agents', level: 2 },
+  { id: 'built-for-three-audiences', text: 'Built for Three Audiences', level: 2 },
   { id: 'point-your-agent-here', text: 'Point your agent here', level: 3 },
   { id: 'agentsmd', text: 'AGENTS.md', level: 3 },
   { id: 'view-as-markdown', text: 'View as Markdown', level: 3 },
@@ -79,15 +79,49 @@ export default function Home() {
           ))}
         </ul>
 
-        <h2 className="MdH2" id="built-for-humans-and-agents">Built for Humans and Agents</h2>
+        <h2 className="MdH2" id="built-for-three-audiences">Built for Three Audiences</h2>
 
         <p className="MdP">
-          This site serves the same documentation in two ways. Humans get a
-          rich browsable UI with syntax-highlighted code, tabbed examples, and
-          responsive navigation. AI agents get clean markdown with the same
-          content — no scraping, no parsing HTML, no losing context to
-          boilerplate.
+          This site serves the same content in three ways.{' '}
+          <strong className="MdStrong">Humans</strong> get a rich browsable UI
+          with syntax-highlighted code, tabbed examples, and responsive
+          navigation.{' '}
+          <strong className="MdStrong">AI agents</strong> get clean markdown with
+          the same content — no scraping, no parsing HTML, no losing context to
+          boilerplate. And{' '}
+          <strong className="MdStrong">Claude Code</strong> gets a plugin
+          marketplace — skills can be installed directly into a session with a
+          single command.
         </p>
+
+        <div className="ApiTable">
+          <table>
+            <thead>
+              <tr>
+                <th>Audience</th>
+                <th>Access</th>
+                <th>Format</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Humans</td>
+                <td>Browse the site</td>
+                <td>HTML with full UI</td>
+              </tr>
+              <tr>
+                <td>AI agents</td>
+                <td><code className="MdCode">/AGENTS.md</code> or append <code className="MdCode">.md</code> to any page URL</td>
+                <td>Plain markdown</td>
+              </tr>
+              <tr>
+                <td>Claude Code</td>
+                <td><code className="MdCode">/plugin marketplace add</code></td>
+                <td>Installable skills</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <h3 className="MdH3" id="point-your-agent-here">Point your agent here</h3>
 
