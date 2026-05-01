@@ -148,6 +148,13 @@ traces each agent turn, message exchange, and termination condition.
   </div>
 </Demo>
 
+> **Note:** AutoGen records tool calls as `inner_messages` within the trace
+> (`ToolCallRequestEvent` and `ToolCallExecutionEvent`) rather than as separate
+> child spans with `span_type=TOOL`. This means tool invocations appear in the
+> trace Summary and Details view, but MLflow's Overview **Tool calls** tab will
+> show a count of zero. The trace data is complete — only the overview aggregation
+> is affected.
+
 ### LlamaIndex
 
 [LlamaIndex](https://www.llamaindex.ai/) specializes in RAG pipelines and data-connected agents.
@@ -175,6 +182,14 @@ Set `MLFLOW_USE_DEFAULT_TRACER_PROVIDER=false` before importing mlflow to avoid 
     <span> — Traces agent runs, tool calls, and Gemini model interactions</span>
   </div>
 </Demo>
+
+> **Note:** ADK traces tool calls as named spans in the trace timeline
+> (e.g. `execute_tool get_weather`), but MLflow's Overview **Tool calls** tab
+> may show a count of zero. This happens because the OTel span attributes
+> that drive the overview aggregation depend on ADK and MLflow versions
+> aligning on the `gen_ai.operation.name` semantic convention. The trace
+> data itself is complete — tool inputs, outputs, and timing are all captured
+> in the Details view.
 
 ## OpenShift Deployment
 
