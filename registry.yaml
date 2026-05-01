@@ -149,3 +149,29 @@ plugins:
       claude-code:
         install: "/plugin install google-adk-agent@agentops-redhatskills"
     depends_on: []
+
+  - name: agent-deploy-openshift
+    description: >
+      Deploy a scaffolded agent to OpenShift using a UBI 9 Python S2I
+      multi-stage build. Works with any agent from the framework skills.
+    version: "0.1.0"
+    category: agent-frameworks
+    tags: [openshift, deploy, s2i, ubi9, python]
+    author:
+      name: eformat
+    source:
+      type: github
+      repo: eformat/agentops-redhatskills-com
+      ref: main
+    strict: false
+    skills_dir: skills/agent-deploy-openshift
+    homepage: https://github.com/eformat/agentops-redhatskills-com
+    repository: https://github.com/eformat/agentops-redhatskills-com
+    skills:
+      - name: agent-deploy-openshift
+        description: Deploy a scaffolded agent to OpenShift
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install agent-deploy-openshift@agentops-redhatskills"
+    depends_on: []

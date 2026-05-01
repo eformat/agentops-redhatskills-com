@@ -141,6 +141,33 @@
       },
       "strict": false,
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Deploy a scaffolded agent to OpenShift using a UBI 9 Python S2I multi-stage build. Works with any agent from the framework skills.\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "openshift",
+        "deploy",
+        "s2i",
+        "ubi9",
+        "python"
+      ],
+      "name": "agent-deploy-openshift",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/agent-deploy-openshift"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
     }
   ]
 }
