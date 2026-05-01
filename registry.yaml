@@ -15,6 +15,33 @@ categories:
 
 plugins:
 
+  - name: agentops-create-content
+    description: >
+      Create new documentation pages for the AgentOps site — MDX content
+      pages with code examples, Demo components, CodeBlock snippets,
+      framework cards, and navigation updates.
+    version: "0.1.0"
+    category: agent-frameworks
+    tags: [documentation, mdx, content, agentops, next-js]
+    author:
+      name: eformat
+    source:
+      type: github
+      repo: eformat/agentops-redhatskills-com
+      ref: main
+    strict: false
+    skills_dir: skills/agentops-create-content
+    homepage: https://github.com/eformat/agentops-redhatskills-com
+    repository: https://github.com/eformat/agentops-redhatskills-com
+    skills:
+      - name: agentops-create-content
+        description: Create new documentation pages for the AgentOps site
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install agentops-create-content@agentops-redhatskills"
+    depends_on: []
+
   - name: langchain-agent
     description: >
       Scaffold a basic LangChain/LangGraph ReAct agent with a tool,

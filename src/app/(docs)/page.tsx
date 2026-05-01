@@ -249,6 +249,18 @@ export default function Home() {
                 <td><code className="MdCode">google-adk-agent</code></td>
                 <td>Scaffold a Google ADK agent with session management</td>
               </tr>
+              <tr>
+                <td><code className="MdCode">agent-deploy-openshift</code></td>
+                <td>Deploy a scaffolded agent to OpenShift using UBI 9 S2I</td>
+              </tr>
+              <tr>
+                <td><code className="MdCode">mlflow-tracing</code></td>
+                <td>Add MLflow tracing to a scaffolded agent</td>
+              </tr>
+              <tr>
+                <td><code className="MdCode">agentops-create-content</code></td>
+                <td>Create new documentation pages for the AgentOps site</td>
+              </tr>
             </tbody>
           </table>
         </div>
