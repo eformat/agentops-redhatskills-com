@@ -103,47 +103,52 @@ langchain-openai>=0.3
 mlflow>=3.1`;
 
 const crewaiExample = `import os
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import mlflow
 from crewai import Agent, Task, Crew, Process
 
 # ── Connect to MLflow on OpenShift AI ──────────────────────────
-mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
+_mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
 
-if mlflow_uri:
-    _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "")
-    if _token_file and os.path.isfile(_token_file):
-        with open(_token_file) as f:
-            os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
+if _mlflow_uri:
+    try:
+        _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "").strip()
+        if _token_file and os.path.isfile(_token_file):
+            with open(_token_file) as f:
+                os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
 
-    mlflow.set_tracking_uri(mlflow_uri)
+        mlflow.set_tracking_uri(_mlflow_uri)
 
-    # Workspace support (MLflow operator CR mode)
-    _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
-    if _workspace:
-        mlflow.set_workspace(_workspace)
+        # Workspace support (MLflow operator CR mode)
+        _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+        if _workspace:
+            mlflow.set_workspace(_workspace)
 
-    experiment_name = os.environ.get(
-        "MLFLOW_EXPERIMENT_NAME", "crewai-agent"
-    )
-
-    if _workspace:
-        import mlflow.tracking.fluent as _fluent
-
-        client = mlflow.MlflowClient()
-        exps = client.search_experiments(
-            filter_string=f"name = '{experiment_name}'"
+        experiment_name = os.environ.get(
+            "MLFLOW_EXPERIMENT_NAME", "crewai-agent"
         )
-        if exps:
-            _fluent._active_experiment_id = exps[0].experiment_id
-        else:
-            _fluent._active_experiment_id = client.create_experiment(
-                experiment_name
-            )
-    else:
-        mlflow.set_experiment(experiment_name)
 
-    mlflow.crewai.autolog()
-    print(f"[mlflow] CrewAI tracing enabled → {mlflow_uri}")
+        if _workspace:
+            import mlflow.tracking.fluent as _fluent
+
+            client = mlflow.MlflowClient()
+            exps = client.search_experiments(
+                filter_string=f"name = '{experiment_name}'"
+            )
+            if exps:
+                _fluent._active_experiment_id = exps[0].experiment_id
+            else:
+                _fluent._active_experiment_id = client.create_experiment(
+                    experiment_name
+                )
+        else:
+            mlflow.set_experiment(experiment_name)
+
+        mlflow.crewai.autolog()
+        print(f"[mlflow] CrewAI tracing enabled → {_mlflow_uri}")
+    except Exception as exc:
+        print(f"[mlflow] Failed to initialise: {exc}")
 
 # ── Define agents and tasks ────────────────────────────────────
 researcher = Agent(
@@ -182,10 +187,12 @@ crew = Crew(
 # All CrewAI traces are automatically sent to MLflow
 result = crew.kickoff(inputs={"topic": "AI agent observability"})`;
 
-const crewaiRequirements = `crewai>=0.121
+const crewaiRequirements = `crewai>=0.121,<1.14
 mlflow>=3.1`;
 
 const autogenExample = `import os
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import mlflow
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.teams import RoundRobinGroupChat
@@ -193,43 +200,46 @@ from autogen_agentchat.conditions import TextMentionTermination
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 # ── Connect to MLflow on OpenShift AI ──────────────────────────
-mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
+_mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
 
-if mlflow_uri:
-    _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "")
-    if _token_file and os.path.isfile(_token_file):
-        with open(_token_file) as f:
-            os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
+if _mlflow_uri:
+    try:
+        _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "").strip()
+        if _token_file and os.path.isfile(_token_file):
+            with open(_token_file) as f:
+                os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
 
-    mlflow.set_tracking_uri(mlflow_uri)
+        mlflow.set_tracking_uri(_mlflow_uri)
 
-    # Workspace support (MLflow operator CR mode)
-    _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
-    if _workspace:
-        mlflow.set_workspace(_workspace)
+        # Workspace support (MLflow operator CR mode)
+        _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+        if _workspace:
+            mlflow.set_workspace(_workspace)
 
-    experiment_name = os.environ.get(
-        "MLFLOW_EXPERIMENT_NAME", "autogen-agent"
-    )
-
-    if _workspace:
-        import mlflow.tracking.fluent as _fluent
-
-        client = mlflow.MlflowClient()
-        exps = client.search_experiments(
-            filter_string=f"name = '{experiment_name}'"
+        experiment_name = os.environ.get(
+            "MLFLOW_EXPERIMENT_NAME", "autogen-agent"
         )
-        if exps:
-            _fluent._active_experiment_id = exps[0].experiment_id
-        else:
-            _fluent._active_experiment_id = client.create_experiment(
-                experiment_name
-            )
-    else:
-        mlflow.set_experiment(experiment_name)
 
-    mlflow.autogen.autolog()
-    print(f"[mlflow] AutoGen tracing enabled → {mlflow_uri}")
+        if _workspace:
+            import mlflow.tracking.fluent as _fluent
+
+            client = mlflow.MlflowClient()
+            exps = client.search_experiments(
+                filter_string=f"name = '{experiment_name}'"
+            )
+            if exps:
+                _fluent._active_experiment_id = exps[0].experiment_id
+            else:
+                _fluent._active_experiment_id = client.create_experiment(
+                    experiment_name
+                )
+        else:
+            mlflow.set_experiment(experiment_name)
+
+        mlflow.autogen.autolog()
+        print(f"[mlflow] AutoGen tracing enabled → {_mlflow_uri}")
+    except Exception as exc:
+        print(f"[mlflow] Failed to initialise: {exc}")
 
 # ── Define agents ──────────────────────────────────────────────
 model_client = OpenAIChatCompletionClient(model="gpt-4o-mini")
@@ -265,49 +275,54 @@ autogen-ext[openai]>=0.4
 mlflow>=3.1`;
 
 const llamaindexExample = `import os
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import mlflow
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 from llama_index.core import Settings
 from llama_index.llms.openai import OpenAI
 
 # ── Connect to MLflow on OpenShift AI ──────────────────────────
-mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
+_mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
 
-if mlflow_uri:
-    _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "")
-    if _token_file and os.path.isfile(_token_file):
-        with open(_token_file) as f:
-            os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
+if _mlflow_uri:
+    try:
+        _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "").strip()
+        if _token_file and os.path.isfile(_token_file):
+            with open(_token_file) as f:
+                os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
 
-    mlflow.set_tracking_uri(mlflow_uri)
+        mlflow.set_tracking_uri(_mlflow_uri)
 
-    # Workspace support (MLflow operator CR mode)
-    _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
-    if _workspace:
-        mlflow.set_workspace(_workspace)
+        # Workspace support (MLflow operator CR mode)
+        _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+        if _workspace:
+            mlflow.set_workspace(_workspace)
 
-    experiment_name = os.environ.get(
-        "MLFLOW_EXPERIMENT_NAME", "llamaindex-agent"
-    )
-
-    if _workspace:
-        import mlflow.tracking.fluent as _fluent
-
-        client = mlflow.MlflowClient()
-        exps = client.search_experiments(
-            filter_string=f"name = '{experiment_name}'"
+        experiment_name = os.environ.get(
+            "MLFLOW_EXPERIMENT_NAME", "llamaindex-agent"
         )
-        if exps:
-            _fluent._active_experiment_id = exps[0].experiment_id
-        else:
-            _fluent._active_experiment_id = client.create_experiment(
-                experiment_name
-            )
-    else:
-        mlflow.set_experiment(experiment_name)
 
-    mlflow.llama_index.autolog()
-    print(f"[mlflow] LlamaIndex tracing enabled → {mlflow_uri}")
+        if _workspace:
+            import mlflow.tracking.fluent as _fluent
+
+            client = mlflow.MlflowClient()
+            exps = client.search_experiments(
+                filter_string=f"name = '{experiment_name}'"
+            )
+            if exps:
+                _fluent._active_experiment_id = exps[0].experiment_id
+            else:
+                _fluent._active_experiment_id = client.create_experiment(
+                    experiment_name
+                )
+        else:
+            mlflow.set_experiment(experiment_name)
+
+        mlflow.llama_index.autolog()
+        print(f"[mlflow] LlamaIndex tracing enabled → {_mlflow_uri}")
+    except Exception as exc:
+        print(f"[mlflow] Failed to initialise: {exc}")
 
 # ── Build a RAG pipeline ──────────────────────────────────────
 Settings.llm = OpenAI(model="gpt-4o-mini")
@@ -327,6 +342,7 @@ llama-index-llms-openai>=0.4
 mlflow>=3.1`;
 
 const adkExample = `import os
+os.environ["MLFLOW_USE_DEFAULT_TRACER_PROVIDER"] = "false"
 import mlflow
 from google.adk.agents import Agent
 from google.adk.runners import Runner
@@ -337,6 +353,11 @@ from google.genai import types
 mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
 
 if mlflow_uri:
+    from opentelemetry import trace
+    from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+
     _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "")
     if _token_file and os.path.isfile(_token_file):
         with open(_token_file) as f:
@@ -361,17 +382,31 @@ if mlflow_uri:
             filter_string=f"name = '{experiment_name}'"
         )
         if exps:
-            _fluent._active_experiment_id = exps[0].experiment_id
+            _exp_id = exps[0].experiment_id
         else:
-            _fluent._active_experiment_id = client.create_experiment(
-                experiment_name
-            )
+            _exp_id = client.create_experiment(experiment_name)
+        _fluent._active_experiment_id = _exp_id
     else:
-        mlflow.set_experiment(experiment_name)
+        _exp_id = mlflow.set_experiment(experiment_name).experiment_id
 
-    # ADK uses OpenTelemetry — export spans to MLflow
-    os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"] = mlflow_uri
-    os.environ["OTEL_EXPORTER_OTLP_PROTOCOL"] = "http/protobuf"
+    # ADK uses OpenTelemetry — configure OTLP exporter for MLflow
+    _otel_endpoint = f"{mlflow_uri.rstrip('/')}/v1/traces"
+    _otel_headers = {"x-mlflow-experiment-id": _exp_id}
+    if _workspace:
+        _otel_headers["x-mlflow-workspace"] = _workspace
+    _token = os.environ.get("MLFLOW_TRACKING_TOKEN", "")
+    if _token:
+        _otel_headers["Authorization"] = f"Bearer {_token}"
+
+    _tracer_provider = TracerProvider()
+    _tracer_provider.add_span_processor(
+        SimpleSpanProcessor(OTLPSpanExporter(
+            endpoint=_otel_endpoint,
+            headers=_otel_headers,
+        ))
+    )
+    trace.set_tracer_provider(_tracer_provider)
+
     print(f"[mlflow] Google ADK tracing enabled → {mlflow_uri}")
 
 # ── Define an ADK agent ───────────────────────────────────────
@@ -418,7 +453,9 @@ async def run():
 asyncio.run(run())`;
 
 const adkRequirements = `google-adk>=1.2
-mlflow>=3.1`;
+mlflow>=3.6
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http`;
 
 const envVarsCode = `# Required
 MLFLOW_TRACKING_URI=http://mlflow:5500

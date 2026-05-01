@@ -26,10 +26,12 @@ as structured spans. On OpenShift AI, MLflow runs as a managed service that your
 connects to via environment variables — no code changes needed when moving between
 standalone and operator-managed deployments.
 
-The pattern is the same across all frameworks: read the tracking URI from the environment,
-optionally authenticate with a service account token, and call the framework's
-`autolog()` function. Every trace is then automatically collected,
-including LLM inputs/outputs, latency, token counts, and tool results.
+The pattern is the same across all frameworks: read the tracking URI from the environment
+and optionally authenticate with a service account token. Most frameworks use
+`autolog()` for automatic trace collection. Google ADK uses OpenTelemetry natively —
+you configure a `TracerProvider` with an OTLP exporter pointed at MLflow instead.
+Either way, every trace is automatically collected, including LLM inputs/outputs,
+latency, token counts, and tool results.
 
 <FrameworkCards />
 
@@ -162,8 +164,10 @@ query engine execution.
 ### Google ADK
 
 [Google Agent Development Kit (ADK)](https://google.github.io/adk-docs/) builds agents using
-Gemini models with built-in tool use. ADK uses OpenTelemetry natively — traces can be exported
-to MLflow's OTLP endpoint or via the `mlflow.tracing` API.
+Gemini models with built-in tool use. ADK emits OpenTelemetry spans natively — you configure
+a `TracerProvider` with an `OTLPSpanExporter` pointed at MLflow's `/v1/traces` endpoint.
+This requires `mlflow>=3.6`, `opentelemetry-sdk`, and `opentelemetry-exporter-otlp-proto-http`.
+Set `MLFLOW_USE_DEFAULT_TRACER_PROVIDER=false` before importing mlflow to avoid duplicate traces.
 
 <Demo files={adkFiles} defaultCollapsed={true}>
   <div className="DemoPreviewText">

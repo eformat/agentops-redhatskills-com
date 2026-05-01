@@ -139,20 +139,83 @@ directory name (e.g. if the directory is `./my-agent`, use `my-agent`).
 Replace `mlflow.<framework>.autolog()` with the correct call from the
 table in Step 3.
 
-For **Google ADK**, replace the autolog and print lines at the end of the
-try block with:
+For **Google ADK**, the entire tracing block is different. ADK uses
+OpenTelemetry natively and needs the OTel SDK configured with an OTLP
+exporter pointed at MLflow. Insert this block instead of the one above:
 
 ```python
-        # ADK uses OpenTelemetry — export spans to MLflow
-        os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"] = _mlflow_uri
-        os.environ["OTEL_EXPORTER_OTLP_PROTOCOL"] = "http/protobuf"
+os.environ["MLFLOW_USE_DEFAULT_TRACER_PROVIDER"] = "false"
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+import mlflow
+
+# ── Optional MLflow tracing ──────────────────────────────────────
+_mlflow_uri = os.environ.get("MLFLOW_TRACKING_URI", "").strip()
+
+if _mlflow_uri:
+    try:
+        from opentelemetry import trace
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+        from opentelemetry.sdk.trace import TracerProvider
+        from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+        _token_file = os.environ.get("MLFLOW_TRACKING_TOKEN_FILE", "").strip()
+        if _token_file and os.path.isfile(_token_file):
+            with open(_token_file) as f:
+                os.environ["MLFLOW_TRACKING_TOKEN"] = f.read().strip()
+
+        mlflow.set_tracking_uri(_mlflow_uri)
+
+        _workspace = os.environ.get("MLFLOW_WORKSPACE", "").strip()
+        if _workspace:
+            mlflow.set_workspace(_workspace)
+
+        experiment_name = os.environ.get(
+            "MLFLOW_EXPERIMENT_NAME", "<agent-name>"
+        )
+
+        if _workspace:
+            import mlflow.tracking.fluent as _fluent
+
+            client = mlflow.MlflowClient()
+            exps = client.search_experiments(
+                filter_string=f"name = '{experiment_name}'"
+            )
+            if exps:
+                _exp_id = exps[0].experiment_id
+            else:
+                _exp_id = client.create_experiment(experiment_name)
+            _fluent._active_experiment_id = _exp_id
+        else:
+            _exp_id = mlflow.set_experiment(experiment_name).experiment_id
+
+        _otel_endpoint = f"{_mlflow_uri.rstrip('/')}/v1/traces"
+        _otel_headers = {"x-mlflow-experiment-id": _exp_id}
+        if _workspace:
+            _otel_headers["x-mlflow-workspace"] = _workspace
+        _token = os.environ.get("MLFLOW_TRACKING_TOKEN", "")
+        if _token:
+            _otel_headers["Authorization"] = f"Bearer {_token}"
+
+        _tracer_provider = TracerProvider()
+        _tracer_provider.add_span_processor(
+            SimpleSpanProcessor(OTLPSpanExporter(
+                endpoint=_otel_endpoint,
+                headers=_otel_headers,
+            ))
+        )
+        trace.set_tracer_provider(_tracer_provider)
+
         print(f"[mlflow] Google ADK tracing enabled → {_mlflow_uri}")
     except Exception as exc:
         print(f"[mlflow] Failed to initialise: {exc}")
 ```
 
-(Note: the Google ADK block does NOT call `autolog()` — it sets
-OpenTelemetry env vars instead.)
+Note the `os.environ["MLFLOW_USE_DEFAULT_TRACER_PROVIDER"] = "false"` line
+must go **before** `import mlflow`. Place it right after `import os`.
+
+For Google ADK, also add these extra packages to `requirements.txt`:
+`opentelemetry-sdk` and `opentelemetry-exporter-otlp-proto-http`.
+And use `mlflow>=3.6` instead of `mlflow>=3.1` (OTLP ingestion requires 3.6+).
 
 **Important**: If `import os` already exists in the file, do NOT add a
 duplicate. If `import mlflow` already exists, do NOT add a duplicate.
