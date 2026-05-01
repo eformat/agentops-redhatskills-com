@@ -17,13 +17,17 @@ via environment variables using `OpenAILike`.
 ## Step 1: Gather Requirements
 
 Parse `$ARGUMENTS` for:
-- `--output-dir <path>`: Directory to write files into (default: current directory `.`)
+- `--output-dir <path>`: Directory to write files into (no default — must be specified or asked)
 - `--tool-name <name>`: Name of the example tool to scaffold (default: `get_weather`)
-- `--headless`: Skip clarifying questions and use all defaults
+- `--headless`: Skip clarifying questions and use all defaults (still requires `--output-dir`)
 
-If `--headless` is NOT set, ask the user (using AskUserQuestion) at most 3 questions:
+**Always ask the user where to write files.** If `--output-dir` was NOT provided in
+`$ARGUMENTS`, ask this question first (using AskUserQuestion) regardless of `--headless`:
 
-1. **Where should the files be written?** (directory path — default `.`)
+1. **Where should the agent files be written?** Provide a directory path (e.g. `./my-agent`, `~/projects/weather-bot`). Do NOT default to the current directory.
+
+If `--headless` is NOT set, also ask up to 2 more questions:
+
 2. **What should the example tool do?** Describe it in plain English so you can write a realistic stub. (default: return fake weather for a city)
 3. **What model / endpoint will you use?** OpenAI, a local vLLM/Ollama server, or RHOAI Model-as-a-Service? (affects the env var instructions in the README)
 

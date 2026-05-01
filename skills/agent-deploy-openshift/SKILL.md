@@ -47,16 +47,17 @@ Ask which framework they want (using AskUserQuestion):
 
 | Option | Skill to run |
 |--------|-------------|
-| LangGraph | `/langchain-agent:langchain-agent --headless` |
-| CrewAI | `/crewai-agent --headless` |
-| AutoGen | `/autogen-agent --headless` |
-| LlamaIndex | `/llamaindex-agent --headless` |
-| Google ADK | `/google-adk-agent --headless` |
+| LangGraph | `/langchain-agent:langchain-agent --headless --output-dir <dir>` |
+| CrewAI | `/crewai-agent --headless --output-dir <dir>` |
+| AutoGen | `/autogen-agent --headless --output-dir <dir>` |
+| LlamaIndex | `/llamaindex-agent --headless --output-dir <dir>` |
+| Google ADK | `/google-adk-agent --headless --output-dir <dir>` |
 
+First ask the user for a directory to scaffold into (e.g. `./my-agent`).
 Tell the user you will scaffold a default agent first. Run the chosen
-framework skill using `Skill` with `--headless` so it writes files without
-further questions. Then use that output directory as the agent directory
-for the rest of this flow.
+framework skill using `Skill` with `--headless --output-dir <dir>` so it
+writes files to the chosen directory without further questions. Then use
+that output directory as the agent directory for the rest of this flow.
 
 ## Step 3: Validate agent folder
 
