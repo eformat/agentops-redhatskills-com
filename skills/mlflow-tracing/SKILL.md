@@ -32,7 +32,11 @@ AskUserQuestion):
 
 ### If the user has not scaffolded an agent
 
-Ask which framework they want (using AskUserQuestion):
+Ask which framework they want (using AskUserQuestion). The question text
+must list all five frameworks (LangGraph, CrewAI, AutoGen, LlamaIndex,
+Google ADK) so the user sees every option even though AskUserQuestion is
+limited to 4 choices. Use "LlamaIndex" and "Google ADK" as a combined
+fourth option or put Google ADK as the "Other" free-text fallback.
 
 | Option | Skill to run |
 |--------|-------------|
