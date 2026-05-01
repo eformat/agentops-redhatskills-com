@@ -16,7 +16,28 @@ one-shot pod.
 
 ## Step 1: Check prerequisites
 
-Run `oc whoami` via Bash to verify the user is logged into OpenShift.
+First, check if `KUBECONFIG` is set by running `echo $KUBECONFIG` via Bash.
+If it is empty, check whether `~/.kube/config` exists by running
+`ls ~/.kube/config 2>/dev/null`.
+
+If neither `KUBECONFIG` is set nor `~/.kube/config` exists, ask the user
+(using AskUserQuestion):
+
+**No kubeconfig found.** In some environments (containers, CI, shared
+workstations) the default `~/.kube/config` is not writable. Where should
+`oc` store its config?
+
+1. **~/.kube/config** — use the default location
+2. **/tmp/kubeconfig** — use a writable temp location (recommended for
+   containers and restricted environments)
+
+If the user picks `/tmp/kubeconfig` (or another custom path), run
+`export KUBECONFIG=/tmp/kubeconfig` via Bash so all subsequent `oc`
+commands in this session use that path. Also prepend
+`KUBECONFIG=/tmp/kubeconfig` to all `oc` commands in later steps (or
+set it once at the top of each Bash call).
+
+Then run `oc whoami` via Bash to verify the user is logged into OpenShift.
 
 - If the command **fails** — tell the user they must log in first
   (`oc login <cluster-url>`) and **stop**. Do not continue.
