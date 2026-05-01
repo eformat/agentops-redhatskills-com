@@ -83,6 +83,8 @@ import).
 The block to insert for **LangGraph, CrewAI, AutoGen, and LlamaIndex**:
 
 ```python
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import mlflow
 
 # ── Optional MLflow tracing ──────────────────────────────────────
@@ -157,7 +159,13 @@ Only add the `import mlflow` line and the tracing block.
 Read `<agent-dir>/requirements.txt`. If it does not already contain
 `mlflow`, append `mlflow>=3.1` on a new line. Use `Edit` to add it.
 
-Do NOT modify any existing version pins — only add the new line.
+Additionally, `mlflow.langchain.autolog()` requires the `langchain` base
+package. If the framework is **LangGraph** and `requirements.txt` does
+not already contain `langchain>=` (note: `langchain-openai` does NOT
+count — the base `langchain` package is needed separately), also add
+`langchain>=0.3`.
+
+Do NOT modify any existing version pins — only add new lines.
 
 ## Step 6: Ask how to run
 
@@ -170,9 +178,24 @@ Ask the user (using AskUserQuestion):
 
 ## Step 7a: Local run path
 
-If the user chose local, tell them to set these environment variables:
+If the user chose local, first ask for their model connection details
+(using AskUserQuestion):
+
+1. **OPENAI_API_KEY** — required. API key, or any non-empty string for
+   local models.
+2. **OPENAI_MODEL_NAME** — model name (default: `gpt-4o-mini`).
+3. **OPENAI_BASE_URL** — base URL for OpenAI-compatible endpoints. Omit
+   for OpenAI.
+
+Then tell them to set both the model and MLflow environment variables:
 
 ```bash
+# Model connection
+export OPENAI_API_KEY=<key>
+export OPENAI_MODEL_NAME=<model>
+export OPENAI_BASE_URL=<url>
+
+# MLflow tracing
 export MLFLOW_TRACKING_INSECURE_TLS=true
 export MLFLOW_TRACKING_URI=https://mlflow.redhat-ods-applications.svc.cluster.local:8443
 export MLFLOW_WORKSPACE=basic-agents
@@ -180,13 +203,18 @@ export MLFLOW_EXPERIMENT_NAME=<agent-name>
 export MLFLOW_TRACKING_TOKEN=$(oc whoami -t)
 ```
 
-Replace `<agent-name>` with the same default used in Step 4.
+Replace `<key>`, `<model>`, and `<url>` with the user's answers. If
+`OPENAI_BASE_URL` was not provided (user is using OpenAI directly),
+omit that line entirely. Replace `<agent-name>` with the same default
+used in Step 4.
 
 Then tell them to install and run:
 
 ```bash
 cd <agent-dir>
-pip install -r requirements.txt
+python -m venv venv
+source venv/bin/activate
+uv pip install -r requirements.txt
 python agent.py
 ```
 

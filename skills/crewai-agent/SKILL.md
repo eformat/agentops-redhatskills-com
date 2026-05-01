@@ -121,7 +121,12 @@ pysqlite3-binary
 Write `<output-dir>/README.md` with:
 
 1. **What this is** — one sentence.
-2. **Install** — `pip install -r requirements.txt`
+2. **Install**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   uv pip install -r requirements.txt
+   ```
 3. **Configure** — env var table:
 
    | Variable | Required | Description |
