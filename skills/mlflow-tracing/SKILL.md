@@ -178,22 +178,15 @@ Ask the user (using AskUserQuestion):
 
 ## Step 7a: Local run path
 
-If the user chose local, first ask for their model connection details
-(using AskUserQuestion):
-
-1. **OPENAI_API_KEY** — required. API key, or any non-empty string for
-   local models.
-2. **OPENAI_MODEL_NAME** — model name (default: `gpt-4o-mini`).
-3. **OPENAI_BASE_URL** — base URL for OpenAI-compatible endpoints. Omit
-   for OpenAI.
-
-Then tell them to set both the model and MLflow environment variables:
+If the user chose local, tell them to set both the model and MLflow
+environment variables. Do NOT ask for the OPENAI values — just print
+them as placeholders for the user to fill in:
 
 ```bash
 # Model connection
-export OPENAI_API_KEY=<key>
-export OPENAI_MODEL_NAME=<model>
-export OPENAI_BASE_URL=<url>
+export OPENAI_API_KEY=<your-key>
+export OPENAI_MODEL_NAME=<your-model-name>
+export OPENAI_BASE_URL=<your-endpoint-url>
 
 # MLflow tracing
 export MLFLOW_TRACKING_INSECURE_TLS=true
@@ -203,10 +196,7 @@ export MLFLOW_EXPERIMENT_NAME=<agent-name>
 export MLFLOW_TRACKING_TOKEN=$(oc whoami -t)
 ```
 
-Replace `<key>`, `<model>`, and `<url>` with the user's answers. If
-`OPENAI_BASE_URL` was not provided (user is using OpenAI directly),
-omit that line entirely. Replace `<agent-name>` with the same default
-used in Step 4.
+Replace `<agent-name>` with the same default used in Step 4.
 
 Then tell them to install and run:
 

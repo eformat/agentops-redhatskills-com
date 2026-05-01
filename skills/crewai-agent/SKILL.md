@@ -112,7 +112,7 @@ decide when and how to call the tool.
 Write `<output-dir>/requirements.txt`:
 
 ```
-crewai[litellm]>=0.121
+crewai[litellm]>=0.121,<1.14
 pysqlite3-binary
 ```
 
