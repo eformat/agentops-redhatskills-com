@@ -45,8 +45,12 @@ Ask which framework they want (using AskUserQuestion):
 First ask the user for a directory to scaffold into (e.g. `./my-agent`).
 Tell the user you will scaffold a default agent first. Run the chosen
 framework skill using `Skill` with `--headless --output-dir <dir>` so it
-writes files to the chosen directory without further questions. Then use
-that output directory as the agent directory for the rest of this flow.
+writes files to the chosen directory without further questions.
+
+**IMPORTANT**: After the scaffolding skill completes, do NOT stop or wait
+for user input. Immediately continue to Step 2 using the output directory
+as the agent directory. The entire flow (Steps 2–7) must complete in one
+go without pausing.
 
 ## Step 2: Validate agent folder
 
