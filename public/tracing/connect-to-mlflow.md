@@ -6,7 +6,7 @@ import { MarkdownLink } from '@/components/MarkdownLink'
 import {
   quickNavItems,
   langgraphFiles, crewaiFiles, autogenFiles, llamaindexFiles, adkFiles,
-  envVarsHighlighted, tokenAuthHighlighted,
+  envVarsHighlighted, tokenAuthHighlighted, gatewayRbacHighlighted,
   valuesYamlHighlighted, deploymentYamlHighlighted, initContainerYamlHighlighted,
 } from './code-examples'
 
@@ -97,6 +97,20 @@ service account token. The token is mounted at the standard path and read at sta
 
 The operator gateway also requires a merged CA bundle (system CAs + Kubernetes service CA)
 for TLS verification. This is handled by an init container in the deployment.
+
+### Gateway RBAC
+
+In CR mode, the MLflow operator gateway authorizes requests using Kubernetes RBAC.
+The pod's service account must have the `mlflow-operator-mlflow-integration` ClusterRole
+bound in the agent's namespace. This grants permission to use the gateway endpoint
+(`gatewayendpoints/use`) and manage experiments, datasets, and registered models.
+
+<CodeBlock title="Grant gateway access">{gatewayRbacHighlighted}</CodeBlock>
+
+Replace `<namespace>` with the namespace where your agent runs (e.g. `basic-agents`).
+If your pod uses a named service account instead of `default`, substitute that name.
+This is only required for CR mode — standalone deployments connect directly to MLflow
+without going through the operator gateway.
 
 ## Agent Frameworks
 

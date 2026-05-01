@@ -290,8 +290,21 @@ Tell the user:
 
 ## Step 7b: OpenShift deploy path
 
-If the user chose OpenShift, tell them the MLflow env vars will need to
-be passed to the pod. Then invoke the agent-deploy-openshift skill:
+If the user chose OpenShift, first grant the pod's service account access
+to the MLflow operator gateway. Run this via Bash (replace `<project>`
+with the OpenShift project name from Step 6, default `basic-agents`):
+
+```bash
+oc create rolebinding agent-mlflow \
+  --clusterrole=mlflow-operator-mlflow-integration \
+  --serviceaccount=<project>:default \
+  -n <project> 2>/dev/null || true
+```
+
+If the RoleBinding already exists, ignore the error.
+
+Then tell the user the MLflow env vars will need to be passed to the pod,
+and invoke the agent-deploy-openshift skill:
 
 Run `Skill` with `agent-deploy-openshift --agent-dir <agent-dir>`
 

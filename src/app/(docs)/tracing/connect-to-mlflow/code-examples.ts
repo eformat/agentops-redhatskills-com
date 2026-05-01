@@ -4,6 +4,7 @@ export const quickNavItems = [
   { id: 'openshift-ai-setup', text: 'OpenShift AI Setup', level: 2 },
   { id: 'environment-variables', text: 'Environment variables', level: 3 },
   { id: 'authentication', text: 'Authentication', level: 3 },
+  { id: 'gateway-rbac', text: 'Gateway RBAC', level: 3 },
   { id: 'agent-frameworks', text: 'Agent Frameworks', level: 2 },
   { id: 'langgraph', text: 'LangGraph', level: 3 },
   { id: 'crewai', text: 'CrewAI', level: 3 },
@@ -562,6 +563,13 @@ export const adkFiles = [
   { name: 'requirements.txt', content: highlight(adkRequirements), language: 'text' },
 ];
 
+const gatewayRbacCode = `# Grant the pod's service account access to the MLflow operator gateway
+oc create rolebinding agent-mlflow \\
+  --clusterrole=mlflow-operator-mlflow-integration \\
+  --serviceaccount=<namespace>:default \\
+  -n <namespace>`;
+
+export const gatewayRbacHighlighted = highlight(gatewayRbacCode);
 export const envVarsHighlighted = highlight(envVarsCode);
 export const tokenAuthHighlighted = highlight(tokenAuthCode);
 export const valuesYamlHighlighted = highlight(valuesYaml);

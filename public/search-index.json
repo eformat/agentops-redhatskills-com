@@ -250,6 +250,11 @@
     "section": "Connect to MLFlow"
   },
   {
+    "title": "Gateway RBAC",
+    "href": "/tracing/connect-to-mlflow#gateway-rbac",
+    "section": "Connect to MLFlow"
+  },
+  {
     "title": "Agent Frameworks",
     "href": "/tracing/connect-to-mlflow#agent-frameworks",
     "section": "Connect to MLFlow"
