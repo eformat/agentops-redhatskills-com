@@ -168,6 +168,33 @@
       },
       "strict": false,
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Add MLflow tracing to a scaffolded agent. Inserts the MLflow init block into agent.py, updates requirements, and optionally deploys to OpenShift. Works with LangGraph, CrewAI, AutoGen, LlamaIndex, and Google ADK agents.\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "mlflow",
+        "tracing",
+        "observability",
+        "openshift-ai",
+        "opentelemetry"
+      ],
+      "name": "mlflow-tracing",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/mlflow-tracing"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
     }
   ]
 }
