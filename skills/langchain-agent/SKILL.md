@@ -36,9 +36,9 @@ Write `<output-dir>/agent.py` with this structure:
 Basic LangGraph ReAct agent.
 
 Reads model connection details from environment variables:
-  OPENAI_API_KEY   - API key (use any non-empty string for local models)
-  OPENAI_BASE_URL  - Base URL (omit to use OpenAI; set for vLLM/Ollama/RHOAI)
-  MODEL_NAME       - Model name (default: gpt-4o-mini)
+  OPENAI_API_KEY        - API key (use any non-empty string for local models)
+  OPENAI_BASE_URL       - Base URL (omit to use OpenAI; set for vLLM/Ollama/RHOAI)
+  OPENAI_MODEL_NAME     - Model name (default: gpt-4o-mini)
 """
 
 import os
@@ -60,29 +60,29 @@ def <tool_name>(<param>: str) -> str:
 # Agent setup
 # ---------------------------------------------------------------------------
 
-model = ChatOpenAI(
-    model=os.environ.get("MODEL_NAME", "gpt-4o-mini"),
-    # OPENAI_API_KEY and OPENAI_BASE_URL are read from the environment automatically
+llm = ChatOpenAI(
+    model=os.environ.get("OPENAI_MODEL_NAME", "gpt-4o-mini"),
+    base_url=os.environ.get("OPENAI_BASE_URL"),
+    api_key=os.environ.get("OPENAI_API_KEY"),
 )
-
-tools = [<tool_name>]
-
-agent = create_react_agent(model, tools)
+agent = create_react_agent(
+    llm,
+    tools=[<tool_name>],
+    prompt="You are a helpful assistant. When you receive a tool "
+           "result, summarize it as a final answer.",
+)
 
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
-if __name__ == "__main__":
-    user_message = "<default question that exercises the tool>"
-    print(f"Question: {user_message}\n")
+result = agent.invoke(
+    {"messages": [{"role": "user", "content": "<default question that exercises the tool>"}]}
+)
 
-    result = agent.invoke({"messages": [("user", user_message)]})
-
-    # The final answer is the last message in the conversation
-    final = result["messages"][-1].content
-    print(f"Answer: {final}")
+for msg in result["messages"]:
+    print(f"{msg.type}: {msg.content}")
 ```
 
 Fill in the blanks (`<tool_name>`, `<param>`, `<docstring>`, etc.) from the
@@ -94,8 +94,8 @@ decide when and how to call the tool.
 Write `<output-dir>/requirements.txt`:
 
 ```
+langgraph>=0.4
 langchain-openai>=0.3
-langgraph>=0.3
 ```
 
 ## Step 4: Write `README.md`
@@ -110,7 +110,7 @@ Write `<output-dir>/README.md` with:
    |----------|----------|-------------|
    | `OPENAI_API_KEY` | Yes | API key. Use any non-empty string for local models. |
    | `OPENAI_BASE_URL` | No | Base URL for OpenAI-compatible endpoints. Omit for OpenAI. |
-   | `MODEL_NAME` | No | Model name. Default: `gpt-4o-mini`. |
+   | `OPENAI_MODEL_NAME` | No | Model name. Default: `gpt-4o-mini`. |
 
    Include example shell snippets for the endpoint type the user selected:
 
@@ -123,7 +123,7 @@ Write `<output-dir>/README.md` with:
    ```bash
    export OPENAI_API_KEY=unused      # any non-empty value
    export OPENAI_BASE_URL=http://localhost:8000/v1
-   export MODEL_NAME=llama3.1
+   export OPENAI_MODEL_NAME=llama3.1
    ```
 
 4. **Run** — `python agent.py`
