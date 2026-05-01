@@ -12,33 +12,6 @@
         "name": "eformat"
       },
       "category": "agent-frameworks",
-      "description": "Create new documentation pages for the AgentOps site \u2014 MDX content pages with code examples, Demo components, CodeBlock snippets, framework cards, and navigation updates.\n",
-      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
-      "keywords": [
-        "documentation",
-        "mdx",
-        "content",
-        "agentops",
-        "next-js"
-      ],
-      "name": "agentops-create-content",
-      "repository": "https://github.com/eformat/agentops-redhatskills-com",
-      "skills": [
-        "./skills/agentops-create-content"
-      ],
-      "source": {
-        "ref": "main",
-        "repo": "eformat/agentops-redhatskills-com",
-        "source": "github"
-      },
-      "strict": false,
-      "version": "0.1.0"
-    },
-    {
-      "author": {
-        "name": "eformat"
-      },
-      "category": "agent-frameworks",
       "description": "Scaffold a basic LangChain/LangGraph ReAct agent with a tool, wired to any OpenAI-compatible endpoint (OpenAI, vLLM, Ollama, RHOAI Model-as-a-Service).\n",
       "homepage": "https://github.com/eformat/agentops-redhatskills-com",
       "keywords": [

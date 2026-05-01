@@ -257,10 +257,6 @@ export default function Home() {
                 <td><code className="MdCode">mlflow-tracing</code></td>
                 <td>Add MLflow tracing to a scaffolded agent</td>
               </tr>
-              <tr>
-                <td><code className="MdCode">agentops-create-content</code></td>
-                <td>Create new documentation pages for the AgentOps site</td>
-              </tr>
             </tbody>
           </table>
         </div>
