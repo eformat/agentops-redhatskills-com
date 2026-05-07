@@ -375,6 +375,9 @@ oc run test-exec --rm -i --restart=Never \\
 const cleanUpCode = `# Delete the sandbox deployment
 helm uninstall code-sandbox -n code-sandbox
 
+# Delete the SeccompProfile (if SPO was used)
+oc delete seccompprofile code-sandbox-sandbox -n code-sandbox 2>/dev/null
+
 # Delete the build and image stream
 oc -n code-sandbox delete bc,is code-sandbox`;
 
