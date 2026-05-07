@@ -422,9 +422,22 @@ helm install code-sandbox ./chart \
 
 (Use `helm upgrade` instead of `helm install` if the release exists.)
 
-Wait for rollout:
+Grant the default service account permission to use the custom SCC
+(required for the SeccompProfile deployed by the Helm chart):
+
 ```bash
-oc rollout status deployment/code-sandbox -n <project> --timeout=120s
+oc adm policy add-scc-to-user code-sandbox-seccomp -z default -n <project>
+```
+
+If the SCC binding already exists, ignore the error.
+
+Wait for rollout. If the deployment was created before the SCC was
+granted, restart it so pods pick up the new permissions:
+
+```bash
+oc rollout status deployment/code-sandbox -n <project> --timeout=60s || \
+  (oc rollout restart deployment/code-sandbox -n <project> && \
+   oc rollout status deployment/code-sandbox -n <project> --timeout=120s)
 ```
 
 ### 8b.6: Run verification tests
