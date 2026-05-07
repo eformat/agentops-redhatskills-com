@@ -89,8 +89,15 @@ of the stack:
   </table>
 </div>
 
-Layers 1-4 are applied in-process by the sandbox application.
-Layer 5 is enforced by the OpenShift cluster regardless of what happens inside the container.
+Layers 1-4 are applied in-process by the sandbox application — AST analysis,
+Python subprocess isolation, Landlock filesystem restriction, and seccomp
+syscall filtering. Layer 5 uses OpenShift platform features — NetworkPolicy,
+SeccompProfile (via Security Profiles Operator), and a custom SCC — to enforce
+a final security boundary that the sandbox cannot bypass, even if fully
+compromised. The application-level and platform-level controls work in harmony:
+if an attacker defeats the in-process guardrails, the cluster-enforced policies
+still block egress traffic, prevent privilege escalation, and deny container
+escape.
 
 ## Agent Frameworks
 
