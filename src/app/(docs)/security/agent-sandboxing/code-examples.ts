@@ -27,6 +27,11 @@ export const quickNavItems = [
   { id: 'seccompprofile-spo', text: 'SeccompProfile (SPO)', level: 3 },
   { id: 'custom-scc', text: 'Custom SCC', level: 3 },
   { id: 'deploying', text: 'Deploying', level: 2 },
+  { id: 'clone-the-repo', text: 'Clone the repo', level: 3 },
+  { id: 'build-the-image', text: 'Build the image', level: 3 },
+  { id: 'deploy-with-helm', text: 'Deploy with Helm', level: 3 },
+  { id: 'verify', text: 'Verify', level: 3 },
+  { id: 'clean-up', text: 'Clean up', level: 3 },
 ];
 
 const guardrailsCode = `from sandbox.guardrails import validate_code
@@ -324,27 +329,31 @@ volumes:
   - downwardAPI
   - persistentVolumeClaim`;
 
-const deployStepsCode = `# 1. Create namespace
+const cloneRepoCode = `# Clone the sandbox source
+git clone https://github.com/eformat/code-sandbox
+cd code-sandbox`;
+
+const buildImageCode = `# Create an OpenShift project
 oc new-project code-sandbox
 
-# 2. Build image in-cluster (project uses Containerfile, not Dockerfile)
+# Create a binary build config
 oc new-build --name=code-sandbox --binary --strategy=docker -n code-sandbox
+
+# Patch for Containerfile (not Dockerfile)
 oc patch bc/code-sandbox -n code-sandbox \\
   -p '{"spec":{"strategy":{"dockerStrategy":{"dockerfilePath":"Containerfile"}}}}'
-oc start-build code-sandbox --from-dir=. -n code-sandbox
 
-# 3. Apply custom SCC (allows localhost seccomp profiles)
-oc apply -f scc.yaml
-oc adm policy add-scc-to-user code-sandbox-seccomp -z default -n code-sandbox
+# Start the build and follow the logs
+oc start-build code-sandbox --from-dir=. -n code-sandbox --follow`;
 
-# 4. Helm install
+const helmDeployCode = `# Deploy with Helm (standalone mode)
 helm install code-sandbox ./chart \\
   -f chart/values-standalone.yaml \\
   --set image.repository=image-registry.openshift-image-registry.svc:5000/code-sandbox/code-sandbox \\
   --set image.tag=latest \\
   -n code-sandbox
 
-# 5. Verify
+# Wait for rollout
 oc rollout status deployment/code-sandbox -n code-sandbox --timeout=120s`;
 
 const verifyCode = `# Health check
@@ -362,6 +371,12 @@ oc run test-exec --rm -i --restart=Never \\
   curl -s -X POST http://code-sandbox.code-sandbox.svc:8000/execute \\
   -H 'Content-Type: application/json' \\
   -d '{"code":"import math\\nprint(f\\"pi = {math.pi}\\")"}'`;
+
+const cleanUpCode = `# Delete the sandbox deployment
+helm uninstall code-sandbox -n code-sandbox
+
+# Delete the build and image stream
+oc -n code-sandbox delete bc,is code-sandbox`;
 
 // ── Framework examples ──────────────────────────────────────────
 // Each agent uses a run_code tool that calls the sandbox sidecar at
@@ -843,5 +858,8 @@ export const deploymentYamlHighlighted = highlight(deploymentYaml);
 export const networkPolicyHighlighted = highlight(networkPolicyYaml);
 export const seccompProfileHighlighted = highlight(seccompProfileYaml);
 export const sccHighlighted = highlight(sccYaml);
-export const deployStepsHighlighted = highlight(deployStepsCode);
+export const cloneRepoHighlighted = highlight(cloneRepoCode);
+export const buildImageHighlighted = highlight(buildImageCode);
+export const helmDeployHighlighted = highlight(helmDeployCode);
 export const verifyHighlighted = highlight(verifyCode);
+export const cleanUpHighlighted = highlight(cleanUpCode);

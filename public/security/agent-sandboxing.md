@@ -14,7 +14,8 @@ import {
   seccompBlockedHighlighted,
   deploymentYamlHighlighted, networkPolicyHighlighted,
   seccompProfileHighlighted, sccHighlighted,
-  deployStepsHighlighted, verifyHighlighted,
+  cloneRepoHighlighted, buildImageHighlighted, helmDeployHighlighted,
+  verifyHighlighted, cleanUpHighlighted,
 } from './code-examples'
 
 <QuickNav items={quickNavItems} />
@@ -397,13 +398,44 @@ oc adm policy add-scc-to-user code-sandbox-seccomp -z default -n code-sandbox
 
 ## Deploying
 
-The sandbox deploys to OpenShift via an in-cluster binary build and Helm chart.
-The Security Profiles Operator must be installed on the cluster. Nodes must run
+The sandbox deploys to OpenShift via an in-cluster binary build and Helm chart,
+following the same pattern as the
+[agent build](/basic-agents/hello-world#build-the-image). Nodes must run
 RHEL 9.6+ or RHCOS based on RHEL 9.6+ for Landlock LSM support (the sandbox
 degrades gracefully on older kernels).
 
-<CodeBlock title="Build and deploy">{deployStepsHighlighted}</CodeBlock>
+### Clone the repo
+
+Clone the sandbox source. The build uses a `Containerfile` (not `Dockerfile`)
+with a UBI 9 Python 3.12 base image:
+
+<CodeBlock title="Clone">{cloneRepoHighlighted}</CodeBlock>
+
+### Build the image
+
+Create a binary BuildConfig, patch it to use the `Containerfile`, and start
+the build. The image is pushed to the internal registry:
+
+<CodeBlock title="Build steps">{buildImageHighlighted}</CodeBlock>
+
+### Deploy with Helm
+
+The Helm chart deploys the sandbox as a Deployment + Service with the
+security context, NetworkPolicy, and optional SeccompProfile. The
+`values-standalone.yaml` file configures a single-replica standalone
+deployment:
+
+<CodeBlock title="Helm install">{helmDeployHighlighted}</CodeBlock>
+
+### Verify
+
+Run a health check and execute code from an ephemeral pod. The pod needs
+the `code-sandbox-client: "true"` label to pass the NetworkPolicy:
 
 <CodeBlock title="Verify">{verifyHighlighted}</CodeBlock>
+
+### Clean up
+
+<CodeBlock title="Delete sandbox">{cleanUpHighlighted}</CodeBlock>
 
 </div>

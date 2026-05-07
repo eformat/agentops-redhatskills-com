@@ -365,6 +365,31 @@
     "section": "Agent Sandboxing"
   },
   {
+    "title": "Clone the repo",
+    "href": "/security/agent-sandboxing#clone-the-repo",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Build the image",
+    "href": "/security/agent-sandboxing#build-the-image",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Deploy with Helm",
+    "href": "/security/agent-sandboxing#deploy-with-helm",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Verify",
+    "href": "/security/agent-sandboxing#verify",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Clean up",
+    "href": "/security/agent-sandboxing#clean-up",
+    "section": "Agent Sandboxing"
+  },
+  {
     "title": "Security",
     "href": "/security",
     "section": ""

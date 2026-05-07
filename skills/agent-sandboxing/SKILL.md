@@ -15,7 +15,7 @@ code to `POST /execute` and gets back stdout, stderr, and exit code.
 The sandbox provides five layers of defense-in-depth: AST guardrails,
 runtime import hook, Landlock filesystem restriction, seccomp syscall
 filtering, and container-level enforcement. Source code is at
-https://github.com/fips-agents/code-sandbox.
+https://github.com/eformat/code-sandbox.
 
 ## Step 1: Locate the agent
 
@@ -245,7 +245,7 @@ Run `ls /home/mike/git/fips-agents-code-sandbox/Containerfile` via Bash.
 If the file does not exist, tell the user to clone the sandbox repo:
 
 ```bash
-git clone https://github.com/fips-agents/code-sandbox /home/mike/git/fips-agents-code-sandbox
+git clone https://github.com/eformat/code-sandbox /home/mike/git/fips-agents-code-sandbox
 ```
 
 Wait for the user to confirm before continuing.
