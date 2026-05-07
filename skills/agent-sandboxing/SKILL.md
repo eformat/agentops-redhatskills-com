@@ -188,6 +188,23 @@ after whatever tools are already registered.
 | LlamaIndex | Add `FunctionTool.from_defaults(fn=run_code)` to `tools=[...]` in `ReActAgent(...)`. Ensure `from llama_index.core.tools import FunctionTool` is imported. |
 | Google ADK | Add `run_code` to `tools=[..., run_code]` in `Agent(...)` |
 
+## Step 5b: Add a sandbox test prompt
+
+Use `Edit` to add a second invocation after the existing test prompt
+that exercises the `run_code` tool. The prompt should be:
+`"Calculate the first 20 Fibonacci numbers using Python code"`
+
+| Framework | What to add |
+|-----------|-------------|
+| LangGraph | Add a second `agent.invoke(...)` call after the existing one: `result = agent.invoke({"messages": [{"role": "user", "content": "Calculate the first 20 Fibonacci numbers using Python code"}]})` followed by the same print loop |
+| CrewAI | Add a second `Task(...)` with `description="Calculate the first 20 Fibonacci numbers using Python code"` and add it to the `Crew(tasks=[...])` list |
+| AutoGen | Add a second `await agent.run(task="Calculate the first 20 Fibonacci numbers using Python code")` call after the existing one |
+| LlamaIndex | Add a second `await agent.run("Calculate the first 20 Fibonacci numbers using Python code")` call after the existing one |
+| Google ADK | Add a second `runner.run_async(...)` call with `types.Part(text="Calculate the first 20 Fibonacci numbers using Python code")` after the existing one |
+
+Print a separator line (e.g. `print("\n--- Sandbox test ---\n")`) between
+the two invocations so the output is easy to read.
+
 ## Step 6: Update requirements.txt
 
 Read `<agent-dir>/requirements.txt`. If it does not already contain
