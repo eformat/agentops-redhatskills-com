@@ -20,7 +20,7 @@ export const quickNavItems = [
   { id: 'subprocess-tightening', text: 'Subprocess tightening', level: 3 },
   { id: 'seccomp-syscall-filtering', text: 'Seccomp Syscall Filtering', level: 2 },
   { id: 'openshift-deployment', text: 'OpenShift Deployment', level: 2 },
-  { id: 'sidecar-deployment', text: 'Sidecar deployment', level: 3 },
+  { id: 'sidecar-deployment-alternative', text: 'Sidecar deployment (alternative)', level: 3 },
   { id: 'profiles', text: 'Profiles', level: 3 },
   { id: 'pod-security-context', text: 'Pod security context', level: 3 },
   { id: 'networkpolicy', text: 'NetworkPolicy', level: 3 },
@@ -382,9 +382,9 @@ oc delete seccompprofile code-sandbox-sandbox -n code-sandbox 2>/dev/null
 oc -n code-sandbox delete bc,is code-sandbox`;
 
 // ── Framework examples ──────────────────────────────────────────
-// Each agent uses a run_code tool that calls the sandbox sidecar at
-// localhost:8000. The sidecar shares the pod network namespace, so
-// no cross-pod traffic or NetworkPolicy client labels are needed.
+// Each agent uses a run_code tool that calls the sandbox service.
+// Set SANDBOX_URL to the service endpoint (standalone) or leave the
+// default localhost:8000 (sidecar / local container).
 
 const runCodeBody = `    response = httpx.post(
         f"{SANDBOX_URL}/execute",
@@ -413,7 +413,7 @@ import httpx
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 
-# Sidecar runs in the same pod — no cross-pod network traffic
+# Sandbox service URL — standalone service or localhost for sidecar/local
 SANDBOX_URL = os.environ.get("SANDBOX_URL", "http://localhost:8000")
 
 
@@ -699,8 +699,9 @@ const adkReqs = `google-adk>=1.2
 litellm
 httpx`;
 
-const envVarsCode = `# The sandbox sidecar shares the pod network — no service URL needed
-# SANDBOX_URL defaults to http://localhost:8000
+const envVarsCode = `# Sandbox service URL
+# Standalone: export SANDBOX_URL="http://code-sandbox.<namespace>.svc:8000"
+# Sidecar / local: SANDBOX_URL defaults to http://localhost:8000
 
 # LLM endpoint (OpenAI or any compatible API)
 export OPENAI_API_KEY="sk-..."
@@ -709,9 +710,9 @@ export OPENAI_MODEL_NAME="gpt-4o-mini"
 # Optional: use a local or hosted model instead
 # export OPENAI_BASE_URL="http://maas.apps.my-cluster.example.com/v1"`;
 
-// ── Sidecar deployment ──────────────────────────────────────────
+// ── Sidecar deployment (alternative pattern) ────────────────────
 
-const sidecarValuesYaml = `# chart/values.yaml — enable the sandbox sidecar
+const sidecarValuesYaml = `# chart/values.yaml — enable the sandbox sidecar (alternative to standalone)
 sandbox:
   enabled: true
   # Profile controls which imports are allowed:
@@ -732,7 +733,7 @@ sandbox:
   seccomp:
     enabled: false`;
 
-const sidecarDeploymentYaml = `# chart/templates/deployment.yaml — sandbox sidecar container
+const sidecarDeploymentYaml = `# chart/templates/deployment.yaml — sandbox sidecar container (alternative)
 containers:
   - name: agent
     image: "my-agent:latest"

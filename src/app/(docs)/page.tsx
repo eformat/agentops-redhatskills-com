@@ -153,7 +153,7 @@ export default function Home() {
           <a className="MdLink" href="/AGENTS.md">AGENTS.md</a>{' '}
           file at the site root is an index of all documentation pages with their
           markdown URLs. It follows the emerging{' '}
-          <a className="MdLink" href="https://agentskills.io/specification">agentskills.io</a>{' '}
+          <a className="MdLink" href="https://agentskills.io/specification" target="_blank" rel="noopener">agentskills.io</a>{' '}
           convention — a machine-readable entry point that tells agents what
           content is available and where to find it.
         </p>

@@ -43,7 +43,7 @@ impractical even when the attacker controls the input source code.
 > [github.com/eformat/code-sandbox](https://github.com/eformat/code-sandbox).
 > The repo contains the Landlock, seccomp, and guardrails code shown on this
 > page. The [fips-agents/examples](https://github.com/fips-agents/examples)
-> repo walks through deploying it as a sidecar on OpenShift step by step.
+> repo walks through deploying it on OpenShift step by step.
 
 ## Defense in Depth
 
@@ -94,13 +94,39 @@ Layer 5 is enforced by the OpenShift cluster regardless of what happens inside t
 
 ## Agent Frameworks
 
-The sandbox deploys as a **sidecar container** in the same pod as your agent.
-The sidecar shares the pod network namespace, so the agent reaches it at
-`localhost:8000` — no cross-pod traffic, no NetworkPolicy client labels, and
-the sandbox inherits the pod's security context automatically.
+The sandbox supports three deployment modes:
 
-Your agent sends code to `POST /execute` and gets back stdout, stderr, and
-exit code. Each framework wraps this in a `run_code` tool that the LLM
+<div className="ApiTable">
+  <table>
+    <thead>
+      <tr>
+        <th>Mode</th>
+        <th>When to use</th>
+        <th>SANDBOX_URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong className="MdStrong">Standalone service</strong> (recommended)</td>
+        <td>Production on OpenShift — own Deployment + Service with NetworkPolicy and independent scaling</td>
+        <td><code className="MdCode">{"http://code-sandbox.<ns>.svc:8000"}</code></td>
+      </tr>
+      <tr>
+        <td><strong className="MdStrong">Sidecar</strong></td>
+        <td>Simpler networking — sandbox shares the pod network with the agent, no cross-pod traffic or client labels needed</td>
+        <td><code className="MdCode">http://localhost:8000</code> (default)</td>
+      </tr>
+      <tr>
+        <td><strong className="MdStrong">Local container</strong></td>
+        <td>Development — run the sandbox image on your workstation</td>
+        <td><code className="MdCode">http://localhost:8000</code> (default)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+In all modes your agent sends code to `POST /execute` and gets back stdout,
+stderr, and exit code. Each framework wraps this in a `run_code` tool that the LLM
 calls to execute code safely. The available imports depend on the sandbox
 profile — `minimal` for stdlib only, or `data-science` for numpy, pandas,
 and scipy. Pick your framework below to jump to a working example.
@@ -109,8 +135,10 @@ and scipy. Pick your framework below to jump to a working example.
 
 ### Environment variables
 
-The sidecar defaults to `localhost:8000`. Override with `SANDBOX_URL` if
-running the sandbox as a separate service instead.
+Set `SANDBOX_URL` to point at your sandbox. For standalone service mode,
+use the in-cluster service URL (e.g. `http://code-sandbox.<namespace>.svc:8000`).
+For local development or sidecar mode the default `http://localhost:8000` works
+without changes.
 
 <CodeBlock title="Environment variables">{envVarsHighlighted}</CodeBlock>
 
@@ -280,16 +308,27 @@ immediately with `SECCOMP_RET_KILL_PROCESS`. Both x86_64 and aarch64 are support
 
 ## OpenShift Deployment
 
-The recommended deployment pattern runs the sandbox as a **sidecar** in the
-agent pod. The sidecar shares the pod network namespace, so the agent reaches
-it at `localhost:8000`. The cluster enforces a final layer of security that
-the sandbox cannot bypass, even if fully compromised.
+The recommended deployment pattern runs the sandbox as a **standalone service**
+— its own Deployment and Service in the cluster. The agent reaches it via the
+internal service URL (`http://code-sandbox.<namespace>.svc:8000`). Agent pods
+need the `code-sandbox-client: "true"` label to pass the NetworkPolicy. The
+cluster enforces a final layer of security that the sandbox cannot bypass,
+even if fully compromised.
 
-### Sidecar deployment
+Alternatively, the sandbox can run as a **sidecar container** in the agent
+pod, sharing the pod network namespace so the agent reaches it at
+`localhost:8000`. Use sidecar mode when you want simpler networking (no
+cross-pod traffic, no client labels needed) and are willing to couple the
+sandbox lifecycle to the agent pod.
 
-Enable the sandbox sidecar in your Helm chart values. The Helm template adds
-a second container to the agent pod with a read-only root filesystem, all
-capabilities dropped, and `/tmp` as the only writable path (10 Mi limit):
+### Sidecar deployment (alternative)
+
+If you prefer to run the sandbox as a sidecar instead of a standalone
+service, enable it in your Helm chart values. The template adds a second
+container to the agent pod with a read-only root filesystem, all capabilities
+dropped, and `/tmp` as the only writable path (10 Mi limit). Since the
+sidecar shares the pod network, the agent reaches it at `localhost:8000`
+with no NetworkPolicy client labels required.
 
 <CodeBlock title="values.yaml — sandbox sidecar">{sidecarValuesHighlighted}</CodeBlock>
 
@@ -351,12 +390,13 @@ path in the container.
 
 ### NetworkPolicy
 
-When running the sandbox as a **standalone service** (separate pod instead
-of a sidecar), a zero-egress NetworkPolicy prevents it from making any
-outbound connections. Ingress is restricted to pods with the
-`code-sandbox-client: "true"` label on port 8000. With the sidecar pattern
-this is not needed — the sandbox container only listens on localhost inside
-the pod.
+In standalone service mode (the recommended pattern), a zero-egress
+NetworkPolicy prevents the sandbox from making any outbound connections.
+Ingress is restricted to pods with the `code-sandbox-client: "true"` label
+on port 8000. This is the default configuration deployed by the Helm chart.
+
+When using sidecar mode instead, NetworkPolicy is not needed — the sandbox
+container only listens on localhost inside the pod.
 
 <CodeBlock title="networkpolicy.yaml (standalone mode only)">{networkPolicyHighlighted}</CodeBlock>
 

@@ -29,9 +29,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ul: (props: ComponentPropsWithoutRef<'ul'>) => (
       <ul className="MdUl" {...props} />
     ),
-    a: (props: ComponentPropsWithoutRef<'a'>) => (
-      <a className="MdLink" {...props} />
-    ),
+    a: ({ href, ...props }: ComponentPropsWithoutRef<'a'>) => {
+      const isExternal = href && /^https?:\/\//.test(href);
+      return (
+        <a
+          className="MdLink"
+          href={href}
+          {...(isExternal ? { target: '_blank', rel: 'noopener' } : {})}
+          {...props}
+        />
+      );
+    },
     code: (props: ComponentPropsWithoutRef<'code'>) => (
       <code className="MdCode" {...props} />
     ),
