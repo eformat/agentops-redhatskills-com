@@ -339,10 +339,16 @@ If the user chose OpenShift:
 Run `oc whoami` via Bash. If it fails, tell the user to log in first
 (`oc login ...`) and stop.
 
-### 8b.2: Check for the sandbox source
+### 8b.2: Clone the sandbox source
 
-Same check as 8a.1. The sandbox source is needed to build the image in
-the cluster.
+Same as 8a.1 — clone into a temp directory:
+
+```bash
+SANDBOX_SRC=$(mktemp -d)/code-sandbox
+git clone https://github.com/eformat/code-sandbox "$SANDBOX_SRC"
+```
+
+Store the `SANDBOX_SRC` path for subsequent commands (`<sandbox-src>`).
 
 ### 8b.3: Ask for project
 
