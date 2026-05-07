@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const topics = [
   { title: 'Basic Agents', href: '/basic-agents', description: 'Build your first agent with step-by-step examples across popular frameworks.' },
-  { title: 'Security', href: '/security', description: 'Secure agent communication, authentication, and authorization.' },
+  { title: 'Security', href: '/security', description: 'Sandbox code execution, authenticate workloads, and enforce policy for agents.' },
   { title: 'Tracing', href: '/tracing', description: 'Send agent traces from any framework to MLflow on OpenShift AI.' },
   { title: 'Evaluation', href: '/evaluation', description: 'Measure agent quality, correctness, and safety.' },
   { title: 'Identity', href: '/identity', description: 'Workload identity for agents using SPIRE, SPIFFE, and service accounts.' },
@@ -230,32 +230,36 @@ export default function Home() {
             </thead>
             <tbody>
               <tr>
-                <td><code className="MdCode">langchain-agent</code></td>
+                <td><Link className="MdLink" href="/basic-agents/hello-world#langgraph"><code className="MdCode">langchain-agent</code></Link></td>
                 <td>Scaffold a LangChain/LangGraph ReAct agent</td>
               </tr>
               <tr>
-                <td><code className="MdCode">crewai-agent</code></td>
+                <td><Link className="MdLink" href="/basic-agents/hello-world#crewai"><code className="MdCode">crewai-agent</code></Link></td>
                 <td>Scaffold a CrewAI agent with role-based orchestration</td>
               </tr>
               <tr>
-                <td><code className="MdCode">autogen-agent</code></td>
+                <td><Link className="MdLink" href="/basic-agents/hello-world#autogen"><code className="MdCode">autogen-agent</code></Link></td>
                 <td>Scaffold an AutoGen multi-agent conversation</td>
               </tr>
               <tr>
-                <td><code className="MdCode">llamaindex-agent</code></td>
+                <td><Link className="MdLink" href="/basic-agents/hello-world#llamaindex"><code className="MdCode">llamaindex-agent</code></Link></td>
                 <td>Scaffold a LlamaIndex ReAct agent</td>
               </tr>
               <tr>
-                <td><code className="MdCode">google-adk-agent</code></td>
+                <td><Link className="MdLink" href="/basic-agents/hello-world#google-adk"><code className="MdCode">google-adk-agent</code></Link></td>
                 <td>Scaffold a Google ADK agent with session management</td>
               </tr>
               <tr>
-                <td><code className="MdCode">agent-deploy-openshift</code></td>
+                <td><Link className="MdLink" href="/basic-agents/hello-world#deploy-on-openshift"><code className="MdCode">agent-deploy-openshift</code></Link></td>
                 <td>Deploy a scaffolded agent to OpenShift using UBI 9 S2I</td>
               </tr>
               <tr>
-                <td><code className="MdCode">mlflow-tracing</code></td>
+                <td><Link className="MdLink" href="/tracing/connect-to-mlflow"><code className="MdCode">mlflow-tracing</code></Link></td>
                 <td>Add MLflow tracing to a scaffolded agent</td>
+              </tr>
+              <tr>
+                <td><Link className="MdLink" href="/security/agent-sandboxing"><code className="MdCode">agent-sandboxing</code></Link></td>
+                <td>Add a secure code sandbox with defense-in-depth isolation</td>
               </tr>
             </tbody>
           </table>

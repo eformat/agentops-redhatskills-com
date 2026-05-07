@@ -155,6 +155,11 @@
     "section": "Using SPIFFE/SPIRE Identity"
   },
   {
+    "title": "Installing kagenti",
+    "href": "/identity/using-spiffe-spire#installing-kagenti",
+    "section": "Using SPIFFE/SPIRE Identity"
+  },
+  {
     "title": "Kagenti labels and annotations",
     "href": "/identity/using-spiffe-spire#kagenti-labels-and-annotations",
     "section": "Using SPIFFE/SPIRE Identity"
@@ -225,9 +230,169 @@
     "section": "Red Hat AI AgentOps"
   },
   {
+    "title": "Agent Sandboxing",
+    "href": "/security/agent-sandboxing",
+    "section": ""
+  },
+  {
+    "title": "Defense in Depth",
+    "href": "/security/agent-sandboxing#defense-in-depth",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Agent Frameworks",
+    "href": "/security/agent-sandboxing#agent-frameworks",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Environment variables",
+    "href": "/security/agent-sandboxing#environment-variables",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "LangGraph",
+    "href": "/security/agent-sandboxing#langgraph",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "CrewAI",
+    "href": "/security/agent-sandboxing#crewai",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "AutoGen",
+    "href": "/security/agent-sandboxing#autogen",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "LlamaIndex",
+    "href": "/security/agent-sandboxing#llamaindex",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Google ADK",
+    "href": "/security/agent-sandboxing#google-adk",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Static Analysis",
+    "href": "/security/agent-sandboxing#static-analysis",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "AST guardrails",
+    "href": "/security/agent-sandboxing#ast-guardrails",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Import allowlist",
+    "href": "/security/agent-sandboxing#import-allowlist",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Isolated Subprocess",
+    "href": "/security/agent-sandboxing#isolated-subprocess",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Runtime preamble",
+    "href": "/security/agent-sandboxing#runtime-preamble",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Resource limits",
+    "href": "/security/agent-sandboxing#resource-limits",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Landlock Filesystem Restriction",
+    "href": "/security/agent-sandboxing#landlock-filesystem-restriction",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Parent process",
+    "href": "/security/agent-sandboxing#parent-process",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Subprocess tightening",
+    "href": "/security/agent-sandboxing#subprocess-tightening",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Seccomp Syscall Filtering",
+    "href": "/security/agent-sandboxing#seccomp-syscall-filtering",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "OpenShift Deployment",
+    "href": "/security/agent-sandboxing#openshift-deployment",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Sidecar deployment",
+    "href": "/security/agent-sandboxing#sidecar-deployment",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Profiles",
+    "href": "/security/agent-sandboxing#profiles",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Pod security context",
+    "href": "/security/agent-sandboxing#pod-security-context",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "NetworkPolicy",
+    "href": "/security/agent-sandboxing#networkpolicy",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "SeccompProfile (SPO)",
+    "href": "/security/agent-sandboxing#seccompprofile-spo",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Custom SCC",
+    "href": "/security/agent-sandboxing#custom-scc",
+    "section": "Agent Sandboxing"
+  },
+  {
+    "title": "Deploying",
+    "href": "/security/agent-sandboxing#deploying",
+    "section": "Agent Sandboxing"
+  },
+  {
     "title": "Security",
     "href": "/security",
     "section": ""
+  },
+  {
+    "title": "Agent Sandboxing",
+    "href": "/security#agent-sandboxing",
+    "section": "Security"
+  },
+  {
+    "title": "Workload Identity",
+    "href": "/security#workload-identity",
+    "section": "Security"
+  },
+  {
+    "title": "Mutual TLS",
+    "href": "/security#mutual-tls",
+    "section": "Security"
+  },
+  {
+    "title": "Policy Enforcement",
+    "href": "/security#policy-enforcement",
+    "section": "Security"
+  },
+  {
+    "title": "Secrets Management",
+    "href": "/security#secrets-management",
+    "section": "Security"
   },
   {
     "title": "Connect to MLFlow",

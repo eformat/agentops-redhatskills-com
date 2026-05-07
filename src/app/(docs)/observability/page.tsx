@@ -12,7 +12,7 @@ export default function ObservabilityPage() {
         <p className="MdP">
           Observability extends beyond tracing to include real-time metrics (token throughput,
           error rates, latency percentiles), structured logging, alerting on anomalous agent
-          behavior, and Grafana dashboards for fleet-wide visibility.
+          behavior, and dashboards for fleet-wide visibility.
         </p>
       </div>
     </>

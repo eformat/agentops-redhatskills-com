@@ -7,6 +7,7 @@ import {
   quickNavItems,
   langgraphFiles, crewaiFiles, autogenFiles, llamaindexFiles, adkFiles,
   spiffeFormatHighlighted, jwtSvidHighlighted,
+  kagentiSetupHighlighted, kagentiSetupOptionsHighlighted,
   valuesYamlHighlighted, deploymentLabelsHighlighted, serviceAccountHighlighted,
   svidVolumeMountHighlighted, k8sManifestHighlighted,
   authproxyRoutesHighlighted, tokenExchangeHighlighted,
@@ -163,6 +164,29 @@ letting the agent inspect and report its own workload identity.
 </Demo>
 
 ## OpenShift Deployment
+
+### Installing kagenti
+
+The [kagenti](https://github.com/kagenti/kagenti) platform setup script installs
+the full stack on an OpenShift cluster: SPIRE, cert-manager, Keycloak, the kagenti
+operator and webhook, MCP Gateway, and optionally MLflow via RHOAI. It also
+configures Istio multi-mesh shared trust so ztunnel mTLS works across control planes.
+
+Prerequisites: cluster-admin access (`oc login`), `helm >= 3.18.0`, and `python3`.
+The script auto-detects the cluster's trust domain from the DNS operator.
+
+<CodeBlock title="Install kagenti">{kagentiSetupHighlighted}</CodeBlock>
+
+The script installs three Helm releases: `kagenti-deps` (SPIRE, cert-manager,
+Istio, Keycloak operators and operands), `kagenti` (operator, webhook, UI), and
+`mcp-gateway`. It is idempotent — re-running upgrades existing releases.
+
+<CodeBlock title="Common options">{kagentiSetupOptionsHighlighted}</CodeBlock>
+
+Once the platform is running, agent namespaces listed in
+`charts/kagenti/values.yaml` under `agentNamespaces` (defaults: `team1`, `team2`)
+are configured for sidecar injection. Deploy your agent into one of these
+namespaces with the kagenti labels below to get automatic SPIRE identity.
 
 ### Kagenti labels and annotations
 

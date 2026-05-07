@@ -569,9 +569,32 @@ oc create rolebinding agent-mlflow \\
   --serviceaccount=<namespace>:default \\
   -n <namespace>`;
 
+const mlflowCrYaml = `apiVersion: mlflow.opendatahub.io/v1
+kind: MLflow
+metadata:
+  name: mlflow
+  labels:
+    {{- include "ai-voice-agent.mlflow.labels" . | nindent 4 }}
+spec:
+  artifactsDestination: 'file:///mlflow/artifacts'
+  backendStoreUri: 'sqlite:////mlflow/mlflow.db'
+  image:
+    image: quay.io/opendatahub/mlflow:odh-stable
+  replicas: 1
+  serveArtifacts: true
+  serviceAccountName: mlflow-sa
+  storage:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ .Values.mlflow.persistence.size | default "10Gi" }}
+  workers: 1`;
+
 export const gatewayRbacHighlighted = highlight(gatewayRbacCode);
 export const envVarsHighlighted = highlight(envVarsCode);
 export const tokenAuthHighlighted = highlight(tokenAuthCode);
 export const valuesYamlHighlighted = highlight(valuesYaml);
+export const mlflowCrHighlighted = highlight(mlflowCrYaml);
 export const deploymentYamlHighlighted = highlight(deploymentYaml);
 export const initContainerYamlHighlighted = highlight(initContainerYaml);

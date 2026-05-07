@@ -11,6 +11,7 @@ export const quickNavItems = [
   { id: 'llamaindex', text: 'LlamaIndex', level: 3 },
   { id: 'google-adk', text: 'Google ADK', level: 3 },
   { id: 'openshift-deployment', text: 'OpenShift Deployment', level: 2 },
+  { id: 'installing-kagenti', text: 'Installing kagenti', level: 3 },
   { id: 'kagenti-labels-and-annotations', text: 'Kagenti labels and annotations', level: 3 },
   { id: 'helm-chart-configuration', text: 'Helm chart configuration', level: 3 },
   { id: 'kubernetes-manifests', text: 'Kubernetes manifests', level: 3 },
@@ -622,6 +623,34 @@ export const adkFiles = [
 ];
 
 export const spiffeFormatHighlighted = highlight(spiffeFormatCode);
+const kagentiSetupCode = `# Clone the kagenti repo (if not already present)
+git clone https://github.com/kagenti/kagenti.git ~/git/kagenti
+
+# Run the platform setup (requires cluster-admin and helm >= 3.18.0)
+cd ~/git/kagenti
+./scripts/ocp/setup-kagenti.sh`;
+
+const kagentiSetupOptionsCode = `# Use a local clone instead of auto-cloning from upstream
+./scripts/ocp/setup-kagenti.sh --kagenti-repo ~/git/kagenti
+
+# Custom Keycloak realm (default: kagenti)
+./scripts/ocp/setup-kagenti.sh --realm nerc
+
+# Skip MLflow integration
+./scripts/ocp/setup-kagenti.sh --skip-mlflow
+
+# Skip MCP Gateway installation
+./scripts/ocp/setup-kagenti.sh --skip-mcp-gateway
+
+# Skip the Kagenti UI and backend
+./scripts/ocp/setup-kagenti.sh --skip-ui
+
+# Dry run — show commands without executing
+./scripts/ocp/setup-kagenti.sh --dry-run`;
+
+export const kagentiSetupHighlighted = highlight(kagentiSetupCode);
+export const kagentiSetupOptionsHighlighted = highlight(kagentiSetupOptionsCode);
+
 export const jwtSvidHighlighted = highlight(jwtSvidCode);
 export const valuesYamlHighlighted = highlight(valuesYamlCode);
 export const deploymentLabelsHighlighted = highlight(deploymentLabelsCode);

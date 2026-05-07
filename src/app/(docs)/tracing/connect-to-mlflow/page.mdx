@@ -7,7 +7,7 @@ import {
   quickNavItems,
   langgraphFiles, crewaiFiles, autogenFiles, llamaindexFiles, adkFiles,
   envVarsHighlighted, tokenAuthHighlighted, gatewayRbacHighlighted,
-  valuesYamlHighlighted, deploymentYamlHighlighted, initContainerYamlHighlighted,
+  valuesYamlHighlighted, mlflowCrHighlighted, deploymentYamlHighlighted, initContainerYamlHighlighted,
 } from './code-examples'
 
 <QuickNav items={quickNavItems} />
@@ -226,6 +226,8 @@ a gateway that handles multi-tenant workspace isolation and service account
 authentication. An init container merges CA certificates for TLS.
 See the [chart CR template](https://github.com/eformat/bank-voice-agent/blob/main/ai-voice-agent/deploy/chart/templates/mlflow-cr.yaml)
 for a full working example.
+
+<CodeBlock title="mlflow-cr.yaml">{mlflowCrHighlighted}</CodeBlock>
 
 <CodeBlock title="backend-deployment.yaml">{deploymentYamlHighlighted}</CodeBlock>
 

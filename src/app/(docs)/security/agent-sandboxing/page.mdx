@@ -1,0 +1,409 @@
+import { Demo } from '@/components/Demo'
+import { CodeBlock } from '@/components/CodeBlock'
+import { QuickNav } from '@/components/QuickNav'
+import { FrameworkCards } from '@/components/FrameworkCards'
+import { MarkdownLink } from '@/components/MarkdownLink'
+import {
+  quickNavItems,
+  langgraphFiles, crewaiFiles, autogenFiles, llamaindexFiles, adkFiles,
+  envVarsHighlighted,
+  sidecarValuesHighlighted, sidecarDeploymentHighlighted, profilesHighlighted,
+  guardrailsHighlighted, astVisitorHighlighted, allowedImportsHighlighted,
+  executorHighlighted, preambleHighlighted,
+  landlockPathsHighlighted, landlockApplyHighlighted,
+  seccompBlockedHighlighted,
+  deploymentYamlHighlighted, networkPolicyHighlighted,
+  seccompProfileHighlighted, sccHighlighted,
+  deployStepsHighlighted, verifyHighlighted,
+} from './code-examples'
+
+<QuickNav items={quickNavItems} />
+
+<div style={{ paddingTop: '1.5rem', paddingBottom: '5rem' }}>
+
+# Agent Sandboxing
+
+<p className="MdSubtitle">
+  Safely execute LLM-generated code on OpenShift with defense-in-depth isolation.
+  <MarkdownLink />
+</p>
+
+When agents execute LLM-generated code — tool calls, data analysis, or
+code-interpreter tasks — that code runs with the same permissions as the agent
+process. Without isolation, a single prompt injection can read mounted secrets,
+exfiltrate data over the network, or escalate privileges on the host.
+
+The code sandbox solves this by wrapping execution in multiple independent
+security layers. Each layer assumes the one above it has been bypassed.
+No single layer is sufficient; together they make exploitation
+impractical even when the attacker controls the input source code.
+
+> The sandbox implementation and a full tutorial are available at
+> [github.com/fips-agents](https://github.com/fips-agents). The
+> [code-sandbox](https://github.com/fips-agents/code-sandbox) repo contains
+> the Landlock, seccomp, and guardrails code shown on this page, and the
+> [examples](https://github.com/fips-agents/examples) repo walks through
+> deploying it as a sidecar on OpenShift step by step.
+
+## Defense in Depth
+
+The sandbox uses five layers of defense, each operating at a different level
+of the stack:
+
+<div className="ApiTable">
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Technology</th>
+        <th>What it blocks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1. Static analysis</td>
+        <td>AST visitor</td>
+        <td>Dangerous calls, blocked imports, dunder traversal, SQL injection</td>
+      </tr>
+      <tr>
+        <td>2. Isolated subprocess</td>
+        <td><code className="MdCode">python3 -I</code> + preamble</td>
+        <td>Runtime import bypass, builtin abuse, memory exhaustion</td>
+      </tr>
+      <tr>
+        <td>3. Filesystem restriction</td>
+        <td>Landlock LSM</td>
+        <td>Reading app source, secrets, config files outside <code className="MdCode">/tmp</code></td>
+      </tr>
+      <tr>
+        <td>4. Syscall filtering</td>
+        <td>seccomp BPF</td>
+        <td>Network sockets (TCP + UDP), io_uring, splice</td>
+      </tr>
+      <tr>
+        <td>5. Cluster enforcement</td>
+        <td>NetworkPolicy + SeccompProfile + SCC</td>
+        <td>All egress traffic, container escape, privilege escalation</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+Layers 1-4 are applied in-process by the sandbox application.
+Layer 5 is enforced by the OpenShift cluster regardless of what happens inside the container.
+
+## Agent Frameworks
+
+The sandbox deploys as a **sidecar container** in the same pod as your agent.
+The sidecar shares the pod network namespace, so the agent reaches it at
+`localhost:8000` — no cross-pod traffic, no NetworkPolicy client labels, and
+the sandbox inherits the pod's security context automatically.
+
+Your agent sends code to `POST /execute` and gets back stdout, stderr, and
+exit code. Each framework wraps this in a `run_code` tool that the LLM
+calls to execute code safely. The available imports depend on the sandbox
+profile — `minimal` for stdlib only, or `data-science` for numpy, pandas,
+and scipy. Pick your framework below to jump to a working example.
+
+<FrameworkCards />
+
+### Environment variables
+
+The sidecar defaults to `localhost:8000`. Override with `SANDBOX_URL` if
+running the sandbox as a separate service instead.
+
+<CodeBlock title="Environment variables">{envVarsHighlighted}</CodeBlock>
+
+### LangGraph
+
+[LangGraph](https://langchain-ai.github.io/langgraph/) wraps the sandbox
+call as a plain Python function registered with `create_react_agent`. The LLM
+generates Python code, calls `run_code`, and summarizes the output.
+
+<Demo files={langgraphFiles} defaultCollapsed={true}>
+  <div className="DemoPreviewText">
+    <strong className="MdStrong">run_code tool</strong>
+    <span> — Sends LLM-generated code to the sandbox via HTTP</span>
+  </div>
+</Demo>
+
+### CrewAI
+
+[CrewAI](https://www.crewai.com/) uses the `@tool` decorator to register
+the sandbox call. The agent's role and goal instruct the LLM to write and
+execute code for every task.
+
+<Demo files={crewaiFiles} defaultCollapsed={true}>
+  <div className="DemoPreviewText">
+    <strong className="MdStrong">@tool("run_code")</strong>
+    <span> — CrewAI tool decorator wrapping the sandbox call</span>
+  </div>
+</Demo>
+
+### AutoGen
+
+[AutoGen](https://microsoft.github.io/autogen/) registers the sandbox call
+as a tool function on an `AssistantAgent`. The agent generates code and
+executes it in a single turn.
+
+<Demo files={autogenFiles} defaultCollapsed={true}>
+  <div className="DemoPreviewText">
+    <strong className="MdStrong">AssistantAgent tools=[run_code]</strong>
+    <span> — Tool function registered on the agent</span>
+  </div>
+</Demo>
+
+### LlamaIndex
+
+[LlamaIndex](https://www.llamaindex.ai/) wraps the function with
+`FunctionTool.from_defaults` and passes it to a `ReActAgent`. The agent
+reasons about what code to write, executes it, and interprets the results.
+
+<Demo files={llamaindexFiles} defaultCollapsed={true}>
+  <div className="DemoPreviewText">
+    <strong className="MdStrong">FunctionTool.from_defaults(fn=run_code)</strong>
+    <span> — ReAct agent with sandbox code execution</span>
+  </div>
+</Demo>
+
+### Google ADK
+
+[Google Agent Development Kit (ADK)](https://google.github.io/adk-docs/)
+passes the function directly as a tool. The agent instruction tells the LLM
+to write Python and use `run_code` for execution.
+
+<Demo files={adkFiles} defaultCollapsed={true}>
+  <div className="DemoPreviewText">
+    <strong className="MdStrong">tools=[run_code]</strong>
+    <span> — ADK agent with sandbox code execution</span>
+  </div>
+</Demo>
+
+## Static Analysis
+
+Before any code executes, the sandbox parses it into an AST and walks every
+node looking for policy violations. This catches the obvious attacks — calling
+`eval()`, importing `subprocess`, traversing `__globals__` — before the
+code ever reaches a Python interpreter.
+
+### AST guardrails
+
+The AST visitor checks bare function calls, attribute access, subscript access,
+string literals, f-strings, and `%`-format operations in a single pass:
+
+<CodeBlock title="AST blocked patterns">{astVisitorHighlighted}</CodeBlock>
+
+The visitor also scans for credential patterns, path traversal sequences,
+and SQL injection via `.format()`, f-strings, and `%`-formatting.
+
+<CodeBlock title="Validation flow">{guardrailsHighlighted}</CodeBlock>
+
+### Import allowlist
+
+Only stdlib modules with no filesystem or network capabilities are permitted.
+Profiles can extend the allowlist — the data-science profile adds numpy, pandas,
+and scipy with additional blocklist rules for dangerous attributes on those
+libraries.
+
+<CodeBlock title="Import profiles">{allowedImportsHighlighted}</CodeBlock>
+
+## Isolated Subprocess
+
+Validated code runs in a separate `python3 -I` subprocess. The `-I` flag
+enables isolated mode: user site-packages are disabled and `PYTHON*`
+environment variables are ignored. Code is written to a temporary file under
+`/tmp` and cleaned up unconditionally after execution.
+
+<CodeBlock title="Subprocess executor">{executorHighlighted}</CodeBlock>
+
+### Runtime preamble
+
+A defense-in-depth preamble is prepended to every execution. Even if an attacker
+constructs an import name dynamically (via `chr()`, `bytes.decode()`, etc.)
+to bypass the AST check, the runtime import hook blocks it. The preamble also
+removes dangerous builtins and monkey-patches `operator.attrgetter` to reject
+dunder access:
+
+<CodeBlock title="Runtime preamble (injected before user code)">{preambleHighlighted}</CodeBlock>
+
+### Resource limits
+
+The subprocess applies `RLIMIT_AS` before any imports to cap memory usage
+(default 512 MB, configurable per profile). A wall-clock timeout (default 10s,
+max 30s) kills the process if it hangs. Stdout and stderr are capped at 50 KB
+each to prevent output flooding.
+
+## Landlock Filesystem Restriction
+
+[Landlock](https://landlock.io/) is a Linux Security Module (LSM) that
+restricts filesystem access without requiring root privileges. It is available
+on RHEL 9.2+ and enabled by default on OpenShift 4.18+.
+
+Landlock rules are inherited by child processes — applying them to the FastAPI
+app at startup automatically restricts the code execution subprocess. The
+subprocess then applies a *second, tighter* Landlock ruleset that drops paths
+the parent process needed but the subprocess should never access.
+
+### Parent process
+
+The parent process allows read-only access to system paths and read-write access
+to `/tmp` only:
+
+<CodeBlock title="Landlock filesystem paths">{landlockPathsHighlighted}</CodeBlock>
+
+<CodeBlock title="Applying Landlock at startup">{landlockApplyHighlighted}</CodeBlock>
+
+Landlock requires the `no_new_privs` bit, which OpenShift's `restricted-v2` SCC
+sets automatically via `allowPrivilegeEscalation: false`. No extra privileges
+are needed.
+
+### Subprocess tightening
+
+The subprocess applies a second Landlock ruleset that drops `/opt/app-root`
+(application source) and `/etc` (mounted secrets and config). Even if all
+Python-level defenses are bypassed, the kernel prevents reading application
+code or credentials. On ABI v4+ kernels, TCP bind and connect are also denied.
+On ABI v5+, abstract Unix sockets and cross-process signals are scoped.
+
+## Seccomp Syscall Filtering
+
+The subprocess installs a seccomp BPF filter that blocks all networking syscalls,
+io_uring (a container escape vector), and `splice()` (used in
+CVE-2026-31431). This closes the UDP gap that Landlock v4 does not cover — Landlock
+restricts TCP but not UDP, while seccomp blocks `socket()` entirely:
+
+<CodeBlock title="Blocked syscalls (x86_64)">{seccompBlockedHighlighted}</CodeBlock>
+
+The filter uses `SECCOMP_RET_ERRNO` with `EPERM` so the subprocess receives a
+clean error rather than being killed. Wrong-architecture processes are killed
+immediately with `SECCOMP_RET_KILL_PROCESS`. Both x86_64 and aarch64 are supported.
+
+## OpenShift Deployment
+
+The recommended deployment pattern runs the sandbox as a **sidecar** in the
+agent pod. The sidecar shares the pod network namespace, so the agent reaches
+it at `localhost:8000`. The cluster enforces a final layer of security that
+the sandbox cannot bypass, even if fully compromised.
+
+### Sidecar deployment
+
+Enable the sandbox sidecar in your Helm chart values. The Helm template adds
+a second container to the agent pod with a read-only root filesystem, all
+capabilities dropped, and `/tmp` as the only writable path (10 Mi limit):
+
+<CodeBlock title="values.yaml — sandbox sidecar">{sidecarValuesHighlighted}</CodeBlock>
+
+<CodeBlock title="deployment.yaml — sidecar container">{sidecarDeploymentHighlighted}</CodeBlock>
+
+The `SANDBOX_URL` environment variable is injected into the agent container
+automatically when `sandbox.enabled` is true.
+
+### Profiles
+
+Profiles control which imports are available and which scan stages run.
+The `SANDBOX_PROFILE` environment variable selects the active profile:
+
+<CodeBlock title="Profile definitions">{profilesHighlighted}</CodeBlock>
+
+<div className="ApiTable">
+  <table>
+    <thead>
+      <tr>
+        <th>Profile</th>
+        <th>Imports</th>
+        <th>Memory</th>
+        <th>Use case</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code className="MdCode">minimal</code></td>
+        <td>stdlib only (math, json, csv, etc.)</td>
+        <td>256 Mi</td>
+        <td>Computation, formatting, string manipulation</td>
+      </tr>
+      <tr>
+        <td><code className="MdCode">data-science</code></td>
+        <td>+ numpy, pandas, scipy</td>
+        <td>512 Mi</td>
+        <td>Data analysis, numerical computation, statistics</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+The data-science profile adds a **blocklist audit** stage that blocks dangerous
+attributes on the allowed libraries — `numpy.ctypeslib`, `pandas.read_pickle`,
+`scipy.io.loadmat`, and other filesystem/deserialization methods. Libraries are
+pre-imported before restrictions are applied so their initialization calls
+(which use `open()` and internal imports) succeed normally.
+
+### Pod security context
+
+The deployment runs as non-root with a read-only root filesystem, all
+capabilities dropped, and a localhost seccomp profile managed by the
+Security Profiles Operator:
+
+<CodeBlock title="deployment.yaml">{deploymentYamlHighlighted}</CodeBlock>
+
+The `/tmp` mount is an `emptyDir` with a 10 Mi size limit — the only writable
+path in the container.
+
+### NetworkPolicy
+
+When running the sandbox as a **standalone service** (separate pod instead
+of a sidecar), a zero-egress NetworkPolicy prevents it from making any
+outbound connections. Ingress is restricted to pods with the
+`code-sandbox-client: "true"` label on port 8000. With the sidecar pattern
+this is not needed — the sandbox container only listens on localhost inside
+the pod.
+
+<CodeBlock title="networkpolicy.yaml (standalone mode only)">{networkPolicyHighlighted}</CodeBlock>
+
+For standalone mode, agent pods must include the client label:
+
+```yaml
+metadata:
+  labels:
+    code-sandbox-client: "true"
+```
+
+### SeccompProfile (SPO)
+
+The Security Profiles Operator deploys a syscall allowlist as a
+`SeccompProfile` custom resource. The default action is `SCMP_ACT_ERRNO` — any
+syscall not explicitly allowed is denied:
+
+<CodeBlock title="seccomp-profile.yaml">{seccompProfileHighlighted}</CodeBlock>
+
+This blocks io_uring, splice, ptrace, module loading, mount operations,
+namespace manipulation (unshare/setns), and BPF — all common privilege
+escalation and container escape vectors. Networking syscalls are allowed at
+the container level because uvicorn needs them; the subprocess BPF filter
+blocks them for user code.
+
+### Custom SCC
+
+OpenShift's `restricted-v2` SCC only allows `runtime/default` seccomp profiles.
+A custom SCC is needed to permit the SPO localhost profile:
+
+<CodeBlock title="SecurityContextConstraints">{sccHighlighted}</CodeBlock>
+
+Bind it to the default service account in the sandbox namespace:
+
+```
+oc adm policy add-scc-to-user code-sandbox-seccomp -z default -n code-sandbox
+```
+
+## Deploying
+
+The sandbox deploys to OpenShift via an in-cluster binary build and Helm chart.
+The Security Profiles Operator must be installed on the cluster. Nodes must run
+RHEL 9.6+ or RHCOS based on RHEL 9.6+ for Landlock LSM support (the sandbox
+degrades gracefully on older kernels).
+
+<CodeBlock title="Build and deploy">{deployStepsHighlighted}</CodeBlock>
+
+<CodeBlock title="Verify">{verifyHighlighted}</CodeBlock>
+
+</div>

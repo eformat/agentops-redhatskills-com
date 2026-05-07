@@ -195,6 +195,34 @@
       },
       "strict": false,
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "eformat"
+      },
+      "category": "agent-frameworks",
+      "description": "Add a secure code sandbox to a scaffolded agent. Inserts the run_code tool into agent.py, starts the sandbox, runs verification tests, and optionally adds MLflow tracing. Works with LangGraph, CrewAI, AutoGen, LlamaIndex, and Google ADK agents.\n",
+      "homepage": "https://github.com/eformat/agentops-redhatskills-com",
+      "keywords": [
+        "sandbox",
+        "code-execution",
+        "security",
+        "landlock",
+        "seccomp",
+        "mlflow"
+      ],
+      "name": "agent-sandboxing",
+      "repository": "https://github.com/eformat/agentops-redhatskills-com",
+      "skills": [
+        "./skills/agent-sandboxing"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "eformat/agentops-redhatskills-com",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
     }
   ]
 }

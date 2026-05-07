@@ -13,7 +13,13 @@ const navigation = {
         { title: 'Hello World Agent', href: '/basic-agents/hello-world' },
       ],
     },
-    { title: 'Security', href: '/security' },
+    {
+      title: 'Security',
+      href: '/security',
+      children: [
+        { title: 'Agent Sandboxing', href: '/security/agent-sandboxing' },
+      ],
+    },
     {
       title: 'Tracing',
       href: '/tracing',
