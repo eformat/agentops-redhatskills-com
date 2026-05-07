@@ -368,7 +368,7 @@ oc get bc code-sandbox -n <project> 2>/dev/null
 
 If it does NOT exist, create it:
 ```bash
-cd /home/mike/git/fips-agents-code-sandbox
+cd <sandbox-src>
 oc new-build --name=code-sandbox --binary --strategy=docker -n <project>
 oc patch bc/code-sandbox -n <project> \
   -p '{"spec":{"strategy":{"dockerStrategy":{"dockerfilePath":"Containerfile"}}}}'
@@ -376,7 +376,7 @@ oc patch bc/code-sandbox -n <project> \
 
 Start the build:
 ```bash
-cd /home/mike/git/fips-agents-code-sandbox
+cd <sandbox-src>
 oc start-build code-sandbox --from-dir=. -n <project> --follow
 ```
 
@@ -393,7 +393,7 @@ helm status code-sandbox -n <project> 2>/dev/null
 If it exists, upgrade; otherwise install:
 
 ```bash
-cd /home/mike/git/fips-agents-code-sandbox
+cd <sandbox-src>
 helm install code-sandbox ./chart \
   -f chart/values-standalone.yaml \
   --set image.repository=image-registry.openshift-image-registry.svc:5000/<project>/code-sandbox \
