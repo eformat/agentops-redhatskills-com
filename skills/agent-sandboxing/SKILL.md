@@ -238,17 +238,18 @@ If `--headless` is set, default to **Locally**.
 
 If the user chose local:
 
-### 8a.1: Check for the sandbox source
+### 8a.1: Clone the sandbox source
 
-Run `ls /home/mike/git/fips-agents-code-sandbox/Containerfile` via Bash.
-
-If the file does not exist, tell the user to clone the sandbox repo:
+Clone the sandbox repo into a temporary directory via Bash:
 
 ```bash
-git clone https://github.com/eformat/code-sandbox /home/mike/git/fips-agents-code-sandbox
+SANDBOX_SRC=$(mktemp -d)/code-sandbox
+git clone https://github.com/eformat/code-sandbox "$SANDBOX_SRC"
 ```
 
-Wait for the user to confirm before continuing.
+Store the `SANDBOX_SRC` path — all subsequent commands use it as
+`<sandbox-src>`. Verify the clone succeeded by checking that
+`<sandbox-src>/Containerfile` exists.
 
 ### 8a.2: Build and start the sandbox container
 
@@ -267,7 +268,7 @@ If it exists, remove it: `<runtime> rm -f code-sandbox`.
 Build and start the sandbox:
 
 ```bash
-<runtime> build -t code-sandbox:latest -f Containerfile /home/mike/git/fips-agents-code-sandbox
+<runtime> build -t code-sandbox:latest -f Containerfile <sandbox-src>
 <runtime> run -d --name code-sandbox -p 8000:8000 -e SANDBOX_PROFILE=<profile> code-sandbox:latest
 ```
 
